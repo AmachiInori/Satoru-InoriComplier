@@ -18,6 +18,6 @@ public:
 class int_cstexpe_overflow : public tokenExpection {
     std::string overflowNumString;
 public:
-    int_cstexpe_overflow(std::string &_ofns) : 
+    explicit int_cstexpe_overflow(std::string &_ofns) : 
         tokenExpection("interge constexpr overflow"), overflowNumString(_ofns) {};
 };

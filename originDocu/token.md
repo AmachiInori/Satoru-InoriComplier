@@ -7,7 +7,7 @@
 - `numtype`是数字类型，char
 - 构造函数传字面串和数字类型
 
-`intToken`整数类 final
-默认底层实现使用补码表示，故以正数形式累加
+`intToken`整数类 final 此处需要可移植性优化
+默认底层实现使用补码表示，故以正数形式累加，以64位有符号整数(long long)保存
 `if (value > LLONG_MAX / 10.0)`判断溢出，但不在构造函数里抛expection（否则就太业余了
 标记下来，在`getValueNum()`里抛，`int_cstexpe_overflow`表示溢出异常

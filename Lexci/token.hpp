@@ -20,7 +20,7 @@ public:
 };
 
 class intToken final : public numToken {
-    long long value = 0;
+    int64_t value = 0;
     bool isGoodNumber = true;
 public:
     explicit intToken(const std::string &_exV) : numToken(_exV, INT) {
@@ -31,7 +31,7 @@ public:
         }
         if (_exV.front() == '-') value *= -1;
     }
-    long long getValueNum() { 
+    int64_t getValueNum() { 
         if (isGoodNumber) {
             return value;
         } else {
@@ -40,6 +40,10 @@ public:
     }
 };
 
-
+class floatToken final : public numToken {
+    double_t value = 0;
+    bool isGoodNumber = true;
+public:
+};
 
 #endif
