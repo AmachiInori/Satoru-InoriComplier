@@ -53,7 +53,7 @@ class floatToken final : public numToken {
 public:
     explicit floatToken(const std::string &_exV) : numToken(_exV, FLT) {
         size_t dotLoca = 0;
-        int eLoca = -1;
+        int32_t eLoca = -1;
         for (size_t i = 0; i < _exV.length(); i++) {
             if (_exV[i] == '.') {
                 dotLoca = i;

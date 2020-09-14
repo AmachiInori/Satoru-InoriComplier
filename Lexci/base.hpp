@@ -40,6 +40,36 @@ inline bool isOperatorChar(char _c) {
     else return false;
 }
 
+typedef uint16_t _DFAstate;
+typedef uint16_t _ACCstate;
+typedef int8_t _ACCaction;
+
+namespace DFAstate {
+    static const _DFAstate START = 0;
+    static const _DFAstate NUM_MAIN_PONE_IN = 1;
+    static const _DFAstate NUM10_MAIN_INPUTING_DIGIT = 2;
+    static const _DFAstate NUM10_ACCEPT_UNSIGNED_INT = 3;
+    static const _DFAstate NUM_MAIN_FIRST_ZERO_IN = 4;
+    static const _DFAstate NUM10_FLT_DOT_IN = 5;
+    static const _DFAstate NUM10_FLT_INPUTING_DIGIT = 6;
+    static const _DFAstate NUM10_FLT_INDEX_E_IN = 7;
+    static const _DFAstate NUM10_FLT_INDEX_PONE_IN = 9;
+    static const _DFAstate NUM10_FLT_INDEX_INPUT_DIGIT = 8;
+
+    static const _ACCstate _NUM10_INT = 1;
+    static const _ACCstate _NUM10_UINT = 2;
+    static const _ACCstate _NUM10_FLT = 3;
+    static const _ACCstate _NUM10_FLT_WITHE = 4;
+
+    static const std::unordered_map<_DFAstate, std::pair<_ACCstate, _ACCaction>> _acctable = {
+        {NUM10_MAIN_INPUTING_DIGIT, {_NUM10_INT, -1}},
+        {NUM10_ACCEPT_UNSIGNED_INT, {_NUM10_UINT, 0}},
+        {NUM10_FLT_INPUTING_DIGIT, {_NUM10_FLT, -1}},
+        {NUM10_FLT_INDEX_INPUT_DIGIT, {_NUM10_FLT_WITHE, -1}}
+    };
+};
+
+
 class tokenExpection {
 public:
     std::string what;
