@@ -2,6 +2,7 @@
 #define _LEXBASE_HPP_
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <math.h>
 #include <stdexcept>
 #include <unordered_set>
@@ -34,11 +35,13 @@ inline bool isAlphabet(char _c) { return (_c >= 'a' && _c <= 'z') || (_c >= 'A' 
 inline bool isIdChar(char _c) { return isAlphabet(_c) || _c == '_'; }
 inline bool isOperatorChar(char _c) { 
     const static std::unordered_set<char> _oper = {
-        '+', '-', '*', '/', '%', '&', '.', ',', '=', '<', '>', '|', '^'
+        '+', '-', '*', '/', '%', '&', '.', ',', '=', '<', '>', '|', '^', '[', ']'
     };
     if (_oper.find(_c) != _oper.end()) return true;
     else return false;
 }
+inline bool isEmptyChar(char _c) { return _c == ' ' || _c == '\n'; }
+inline bool isSynChar(char _c) { return _c == '{' || _c == '}'; }
 
 typedef uint16_t _DFAstate;
 typedef uint16_t _ACCstate;
@@ -61,33 +64,53 @@ namespace DFAstate {
     static const _ACCstate _NUM10_FLT = 3;
     static const _ACCstate _NUM10_FLT_WITHE = 4;
 
-    static const std::unordered_map<_DFAstate, std::pair<_ACCstate, _ACCaction>> _acctable = {
-        {NUM10_MAIN_INPUTING_DIGIT, {_NUM10_INT, -1}},
+    static std::unordered_map<_DFAstate, std::pair<_ACCstate, _ACCaction>> _acctable = {
+        {NUM10_MAIN_INPUTING_DIGIT, {_NUM10_INT, 1}},
         {NUM10_ACCEPT_UNSIGNED_INT, {_NUM10_UINT, 0}},
-        {NUM10_FLT_INPUTING_DIGIT, {_NUM10_FLT, -1}},
-        {NUM10_FLT_INDEX_INPUT_DIGIT, {_NUM10_FLT_WITHE, -1}}
+        {NUM10_FLT_INPUTING_DIGIT, {_NUM10_FLT, 1}},
+        {NUM10_FLT_INDEX_INPUT_DIGIT, {_NUM10_FLT_WITHE, 1}}
     };
+    inline bool isStateAcc(_DFAstate _state) { return _acctable.find(_state) != _acctable.end(); }
+    inline std::pair<_ACCstate, _ACCaction> getAccState(_DFAstate _state) { 
+        if (isStateAcc(_state)) return _acctable[_state];
+        else return {0, 0};
+    }
 };
 
 
-class tokenExpection {
+class STRExpection {
 public:
     std::string what;
-    explicit tokenExpection(std::string exMsg) : what(exMsg) {};
+    explicit STRExpection(std::string exMsg) : what(exMsg) {};
 };
 
-class int_cstexpe_overflow : public tokenExpection {
+class int_cstexpe_overflow : public STRExpection {
     std::string overflowNumString;
 public:
     explicit int_cstexpe_overflow(std::string &_ofns) : 
-        overflowNumString(_ofns), tokenExpection("interge constexpr overflow in: " + _ofns) {};
+        overflowNumString(_ofns), STRExpection("interge constexpr overflow in: " + _ofns) {};
 };
 
-class flt_cstexpe_overflow : public tokenExpection {
+class flt_cstexpe_overflow : public STRExpection {
     std::string overflowNumString;
 public:
     explicit flt_cstexpe_overflow(std::string &_ofns) : 
-        overflowNumString(_ofns), tokenExpection("float constexpr overflow in: " + _ofns) {};
+        overflowNumString(_ofns), STRExpection("float constexpr overflow in: " + _ofns) {};
 };
+
+class no_mode_matched : public STRExpection {
+    std::string errorString;
+public:
+    explicit no_mode_matched(std::string &_ofns) : 
+        errorString(_ofns), STRExpection("no mode matched with " + _ofns) {};
+};
+
+class can_not_return_back : public STRExpection {
+    size_t errorLine;
+public:
+    explicit can_not_return_back(size_t _ofns) : 
+        errorLine(_ofns), STRExpection("buffer can't return back at line " + _ofns) {};
+};
+
 
 #endif
