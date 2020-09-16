@@ -6,9 +6,16 @@ class token {
 protected:
     _tokenType type;
 public:
-    explicit token(int tt = 0) : type(tt) {};
+    explicit token(int tt = 0) : type(tt) {}; // type为0特指结束
     inline _tokenType getTokenType() { return type; }
     virtual void printToken() { std::cout << (int)type << ' ' << "baseToken\n"; }
+};
+
+class errToken : public token {
+public:
+    explicit errToken() : token(-1) {}; // type为0特指结束
+    inline _tokenType getTokenType() { return type; }
+    virtual void printToken() { std::cout << (int)type << ' ' << "ERRTOKEN\n"; }
 };
 
 class numToken : public token {
@@ -23,7 +30,7 @@ public:
     }
 };
 
-class intToken final : public numToken {
+class intToken final: public numToken {
     int64_t value = 0;
     bool isGoodNumber = true;
 public:
@@ -39,6 +46,33 @@ public:
         std::cout << (int)type << ' ' << (int)numtype << ' ' << exprValue << ' ' << value << ' ' << "intToken\n"; 
     }
     inline int64_t getValueNum() { 
+        if (isGoodNumber) {
+            return value;
+        } else {
+            throw(int_cstexpe_overflow(exprValue));
+        }
+    }
+};
+
+class UintToken final : public numToken {
+    uint64_t value = 0;
+    bool isGoodNumber = true;
+public:
+    explicit UintToken(const std::string &_exV) : numToken(_exV, INT) {
+        for (size_t i = (_exV.front() == '-' || _exV.front() == '+') ? 1 : 0; i < _exV.length(); i++) {
+            if (value > UINT64_MAX / 10.0) isGoodNumber = false;
+            value *= 10;
+            value += _exV[i] - '0';
+        }
+        if (_exV.front() == '-') {
+            value -= value;
+            value -= value;
+        }
+    }
+    void printToken() override { 
+        std::cout << (int)type << ' ' << (int)numtype << ' ' << exprValue << ' ' << value << ' ' << "UintToken\n"; 
+    }
+    inline uint64_t getValueNum() { 
         if (isGoodNumber) {
             return value;
         } else {
@@ -68,13 +102,13 @@ public:
             res += _exV[i] - '0';
         }
         for (size_t i = ((eLoca == -1) ? _exV.size() : eLoca) - 1; i > dotLoca; i--) {
-            dotLoca /= 10;
-            dotLoca += _exV[i] - '0';
+            floatRes += _exV[i] - '0';
+            floatRes /= 10;
         }
         res += floatRes;
         if (eLoca != -1) { // E后的文法规约是整数
             int32_t indexRes = 0;
-            for (size_t i = eLoca + ((_exV[eLoca + 1] == '+' || _exV[eLoca + 1] == '-') ? 1 : 0); i < _exV.size(); i++) {
+            for (size_t i = eLoca + ((_exV[eLoca + 1] == '+' || _exV[eLoca + 1] == '-') ? 2 : 1); i < _exV.size(); i++) {
                 indexRes *= 10;
                 indexRes += _exV[i] - '0';
             }
@@ -84,7 +118,7 @@ public:
         value = res;
     }
     void printToken() override { 
-        std::cout << (int)type << ' ' << numtype << ' ' << exprValue << ' ' << value << ' ' << "fltToken\n"; 
+        std::cout << (int)type << ' ' << (int)numtype << ' ' << exprValue << ' ' << value << ' ' << "fltToken\n"; 
     }
     inline double_t getValueNum() { 
         if (isGoodNumber) {
@@ -126,6 +160,9 @@ public:
     explicit remainToken(const std::string &_str, _keyWordType kt) : 
         idToken(_str), _kt(kt) {
         token::type = REMAIN;
+    }
+    void printToken() override { 
+        std::cout << (int)type << ' ' << idValue << ' ' << (int)_kt << "remainToken\n"; 
     }
 };
 

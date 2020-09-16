@@ -21,7 +21,7 @@ private:
     
     void fillBuffer(std::string* _buf);
     char newCharFromBuffer();
-    void insertTable(idToken _idT);
+    bool insertTable(idToken _idT);
     bool findInIdTable(std::string _str); //如果是已经有的token，就不再新建 内联函数不可跨文件调用
 public:
     lexAna(std::string _file);

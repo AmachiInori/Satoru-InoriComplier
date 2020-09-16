@@ -26,8 +26,20 @@ inline std::unordered_map<std::string, token> lexAna::getIdTable() {
     return idTable; 
 }
 
+bool lexAna::insertTable(idToken _idT) {
+    if (findInIdTable(_idT.getValueString())) return false;
+    else idTable[_idT.getValueString()] = _idT;
+    return true;
+}
+
 token* lexAna::getNextToken() {
-    return this->dfaProcess->getToken();
+    try {
+        return this->dfaProcess->getToken();
+    } catch (STRExpection e) {
+        std::cout << e.what << "\n";
+        return new errToken();
+    }
+    
 }
 
 char lexAna::getNextChar() {
@@ -41,7 +53,7 @@ char lexAna::getNextChar() {
     if (tempChar == '#') {
         tempChar = newCharFromBuffer();
         while (tempChar != '#' && tempChar != 0)
-            tempChar = newCharFromBuffer(); //×¢ÊÍ´æÔÚÎÊÌâ
+            tempChar = newCharFromBuffer(); 
     }
     return tempChar; 
 }

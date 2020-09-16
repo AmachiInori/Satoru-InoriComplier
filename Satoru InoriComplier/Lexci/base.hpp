@@ -18,12 +18,12 @@ static const _keyWordType TRUE = 1, FALSE = 2, IF = 3, ELSE = 4, ELIF = 5, GOTO 
     FOR = 10, DO = 11, CONTINUE = 12, BREAK = 13, RETURN = 14, KWINT = 15, KWFLT = 16, KWCHAR = 17, KWLONG = 18, KWSHT = 19,
     KWDBL = 20, UNSIGNED = 21, SIGNED = 22, VOID = 23, CONST = 24;
 const static std::unordered_map<std::string, _keyWordType> _remain = {
-        {"true", TRUE}, {"false", FALSE}, 
-        {"if", IF}, {"else", ELSE}, {"elif", ELIF}, {"goto", GOTO}, {"switch", SWITCH}, 
-        {"while", WHILE}, {"until", UNTIL}, {"for", FOR}, {"do", DO}, {"continue", CONTINUE}, {"break", BREAK}, 
-        {"return", RETURN}, 
-        {"int", KWINT}, {"float", KWFLT}, {"char", KWCHAR}, {"long", KWLONG}, {"short", KWSHT}, {"double", KWDBL}, 
-        {"unsigned", UNSIGNED}, {"signed", SIGNED}, {"void", VOID}, {"const", CONST}
+    {"true", TRUE}, {"false", FALSE}, 
+    {"if", IF}, {"else", ELSE}, {"elif", ELIF}, {"goto", GOTO}, {"switch", SWITCH}, 
+    {"while", WHILE}, {"until", UNTIL}, {"for", FOR}, {"do", DO}, {"continue", CONTINUE}, {"break", BREAK}, 
+    {"return", RETURN}, 
+    {"int", KWINT}, {"float", KWFLT}, {"char", KWCHAR}, {"long", KWLONG}, {"short", KWSHT}, {"double", KWDBL}, 
+    {"unsigned", UNSIGNED}, {"signed", SIGNED}, {"void", VOID}, {"const", CONST}
 };
 
 inline bool isKeyWord(std::string _id) {
@@ -59,12 +59,15 @@ namespace DFAstate {
     static const _DFAstate NUM10_FLT_INDEX_E_IN = 7;
     static const _DFAstate NUM10_FLT_INDEX_PONE_IN = 9;
     static const _DFAstate NUM10_FLT_INDEX_INPUT_DIGIT = 8;
+    static const _DFAstate ID_FIRST_CHAR_IN = 10;
+    static const _DFAstate ID_CHAR_INPUT = 11;
     static const _DFAstate END = UINT16_MAX;
 
     static const _ACCstate _NUM10_INT = 1;
     static const _ACCstate _NUM10_UINT = 2;
     static const _ACCstate _NUM10_FLT = 3;
     static const _ACCstate _NUM10_FLT_WITHE = 4;
+    static const _ACCstate _ID = 5;
     static const _ACCstate _END = UINT16_MAX;
 
     static std::unordered_map<_DFAstate, std::pair<_ACCstate, _ACCaction>> _acctable = {
@@ -72,6 +75,8 @@ namespace DFAstate {
         {NUM10_ACCEPT_UNSIGNED_INT, {_NUM10_UINT, 0}},
         {NUM10_FLT_INPUTING_DIGIT, {_NUM10_FLT, 1}},
         {NUM10_FLT_INDEX_INPUT_DIGIT, {_NUM10_FLT_WITHE, 1}},
+        {ID_FIRST_CHAR_IN, {_ID, 1}},
+        {ID_CHAR_INPUT, {_ID, 1}},
         {END, {_END, 0}}
     };
     inline bool isStateAcc(_DFAstate _state) { return _acctable.find(_state) != _acctable.end(); }

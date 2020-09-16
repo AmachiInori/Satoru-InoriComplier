@@ -32,6 +32,10 @@ bool DFA::trans(char _iptc) {
             stateTo(END);
             return true;
         }
+        else if (isIdChar(_iptc)) {
+            stateTo(ID_FIRST_CHAR_IN);
+            return true;
+        }
         else return false;
         break;
 
@@ -123,6 +127,44 @@ bool DFA::trans(char _iptc) {
         }
         else return false;
         break;
+    
+    case ID_FIRST_CHAR_IN: //10
+        if (isIdChar(_iptc) || isDigit(_iptc)) {
+            stateTo(ID_CHAR_INPUT);
+            return true;
+        }
+        break;
+    }
+}
+
+token* DFA::bulidToken(_ACCstate _accKind, std::string _accString) {
+    using namespace DFAstate;
+    if (host->findInIdTable(_accString)) return &host->idTable[_accString];
+    switch (_accKind) {
+    case _NUM10_INT:
+        return new intToken(_accString);
+        break;
+    case _NUM10_FLT:
+        return new floatToken(_accString);
+        break;
+    case _NUM10_FLT_WITHE:
+        return new floatToken(_accString);
+        break;
+    case _NUM10_UINT:
+        return new UintToken(std::string(&_accString[0], &_accString[_accString.size() - 1]));
+        break;
+    case _ID: 
+        {
+            idToken* tempToken = new idToken(_accString);
+            host->insertTable(*tempToken);
+            return tempToken;
+            break;
+        }
+    case _END:
+        return new token(0);
+        break;
+    default:
+        break;
     }
 }
 
@@ -132,6 +174,7 @@ token* DFA::getToken(){
     char tempChar;
     while (tempChar = host->getNextChar()) {
         if (isEmptyChar(tempChar)) { // 被空白符分隔的串视为两个token
+            if (state == DFAstate::START) continue;
             if (DFAstate::isStateAcc(state)) {
                 std::pair<_ACCstate, _ACCaction> tempAcc = DFAstate::getAccState(state);
                 return bulidToken(tempAcc.first, tempToken);
@@ -149,8 +192,8 @@ token* DFA::getToken(){
                 }
             }
         } else {
-            if (DFAstate::isStateAcc(lastState)) {
-                std::pair<_ACCstate, _ACCaction> tempAcc = DFAstate::getAccState(lastState);
+            if (DFAstate::isStateAcc(state)) {
+                std::pair<_ACCstate, _ACCaction> tempAcc = DFAstate::getAccState(state);
                 if (tempAcc.second == 1) {
                     tempToken.pop_back();
                     host->pointReturn();
@@ -165,18 +208,4 @@ token* DFA::getToken(){
     return new token();
 }
 
-token* DFA::bulidToken(_ACCstate _accKind, std::string _accString) {
-    using namespace DFAstate;
-    if (host->findInIdTable(_accString)) return &host->idTable[_accString];
-    switch (_accKind) {
-    case _NUM10_INT:
-        return new intToken(_accString);
-        break;
-    case _END:
-        return new token(0);
-        break;
-    default:
-        break;
-    }
-}
 #endif
