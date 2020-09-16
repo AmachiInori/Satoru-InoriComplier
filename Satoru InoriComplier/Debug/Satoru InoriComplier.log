@@ -1,0 +1,7 @@
+﻿  DFA.cpp
+  lex.cpp
+  lexciTest.cpp
+  正在生成代码...
+C:\Users\Zhao Yufeng\Documents\VSCode\C++\Satoru InoriComplier\Satoru InoriComplier\Lexci\DFA.cpp(181): warning C4715: “DFA::bulidToken”: 不是所有的控件路径都返回值
+C:\Users\Zhao Yufeng\Documents\VSCode\C++\Satoru InoriComplier\Satoru InoriComplier\Lexci\DFA.cpp(127): warning C4715: “DFA::trans”: 不是所有的控件路径都返回值
+  Satoru InoriComplier.vcxproj -> C:\Users\Zhao Yufeng\Documents\VSCode\C++\Satoru InoriComplier\Debug\Satoru InoriComplier.exe

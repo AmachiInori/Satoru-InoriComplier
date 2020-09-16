@@ -18,11 +18,25 @@
     <ClInclude Include="Lexci\base.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Lexci\lex.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Lexci\token.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Lexci\DFA.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Lexci\lex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Lexci\DFA.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Lexci\lex.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Lexci\lexciTest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

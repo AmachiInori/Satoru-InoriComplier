@@ -17,16 +17,16 @@ static const _numType INT = 1, FLT = 2;
 static const _keyWordType TRUE = 1, FALSE = 2, IF = 3, ELSE = 4, ELIF = 5, GOTO = 6, SWITCH = 7, WHILE = 8, UNTIL = 9,
     FOR = 10, DO = 11, CONTINUE = 12, BREAK = 13, RETURN = 14, KWINT = 15, KWFLT = 16, KWCHAR = 17, KWLONG = 18, KWSHT = 19,
     KWDBL = 20, UNSIGNED = 21, SIGNED = 22, VOID = 23, CONST = 24;
-
-inline bool isKeyWord(std::string _id) {
-    const static std::unordered_map<std::string, _keyWordType> _remain = {
+const static std::unordered_map<std::string, _keyWordType> _remain = {
         {"true", TRUE}, {"false", FALSE}, 
         {"if", IF}, {"else", ELSE}, {"elif", ELIF}, {"goto", GOTO}, {"switch", SWITCH}, 
         {"while", WHILE}, {"until", UNTIL}, {"for", FOR}, {"do", DO}, {"continue", CONTINUE}, {"break", BREAK}, 
         {"return", RETURN}, 
         {"int", KWINT}, {"float", KWFLT}, {"char", KWCHAR}, {"long", KWLONG}, {"short", KWSHT}, {"double", KWDBL}, 
         {"unsigned", UNSIGNED}, {"signed", SIGNED}, {"void", VOID}, {"const", CONST}
-    };
+};
+
+inline bool isKeyWord(std::string _id) {
     if (_remain.find(_id) != _remain.end()) return true;
     else return false;
 }
@@ -40,8 +40,9 @@ inline bool isOperatorChar(char _c) {
     if (_oper.find(_c) != _oper.end()) return true;
     else return false;
 }
-inline bool isEmptyChar(char _c) { return _c == ' ' || _c == '\n'; }
+inline bool isEmptyChar(char _c) { return _c == ' ' || _c == '\n' || _c == '\r' || _c == -1 || _c == '#'; }
 inline bool isSynChar(char _c) { return _c == '{' || _c == '}'; }
+//做一下分隔符;
 
 typedef uint16_t _DFAstate;
 typedef uint16_t _ACCstate;
@@ -58,17 +59,20 @@ namespace DFAstate {
     static const _DFAstate NUM10_FLT_INDEX_E_IN = 7;
     static const _DFAstate NUM10_FLT_INDEX_PONE_IN = 9;
     static const _DFAstate NUM10_FLT_INDEX_INPUT_DIGIT = 8;
+    static const _DFAstate END = UINT16_MAX;
 
     static const _ACCstate _NUM10_INT = 1;
     static const _ACCstate _NUM10_UINT = 2;
     static const _ACCstate _NUM10_FLT = 3;
     static const _ACCstate _NUM10_FLT_WITHE = 4;
+    static const _ACCstate _END = UINT16_MAX;
 
     static std::unordered_map<_DFAstate, std::pair<_ACCstate, _ACCaction>> _acctable = {
         {NUM10_MAIN_INPUTING_DIGIT, {_NUM10_INT, 1}},
         {NUM10_ACCEPT_UNSIGNED_INT, {_NUM10_UINT, 0}},
         {NUM10_FLT_INPUTING_DIGIT, {_NUM10_FLT, 1}},
-        {NUM10_FLT_INDEX_INPUT_DIGIT, {_NUM10_FLT_WITHE, 1}}
+        {NUM10_FLT_INDEX_INPUT_DIGIT, {_NUM10_FLT_WITHE, 1}},
+        {END, {_END, 0}}
     };
     inline bool isStateAcc(_DFAstate _state) { return _acctable.find(_state) != _acctable.end(); }
     inline std::pair<_ACCstate, _ACCaction> getAccState(_DFAstate _state) { 
@@ -112,5 +116,11 @@ public:
         errorLine(_ofns), STRExpection("buffer can't return back at line " + _ofns) {};
 };
 
+class can_not_open_file : public STRExpection {
+    std::string errorString;
+public:
+    explicit can_not_open_file(std::string &_file) :
+        errorString(_file), STRExpection("file wrong " + _file) {};
+};
 
 #endif
