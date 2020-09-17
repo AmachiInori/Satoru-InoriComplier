@@ -10,6 +10,7 @@ class lexAna {
 private:
     bool isRefilled = true;
     size_t lineNumber, lastLineNumber;
+    size_t listNumber, lastListNumber;
     size_t nowPoint, lastPoint; //np表示刚刚被传入分析的char
     char lastChar, nowChar;
     const size_t bufferSize;

@@ -21,6 +21,10 @@ bool DFA::trans(char _iptc) {
             stateTo(NUM10_MAIN_INPUTING_DIGIT);
             return true;
         } 
+        else if (isEmptyChar(_iptc)) {
+            stateTo(START);
+            return true;
+        }
         else if (_iptc == '0') {
             stateTo(NUM_MAIN_FIRST_ZERO_IN);
             return true;
@@ -45,7 +49,10 @@ bool DFA::trans(char _iptc) {
             stateTo(OP_NOMDBL_FIRST_IN);
             return true;
         }
-        else return false;
+        else if (_iptc == '"') {
+            stateTo(STR_QUO_IN);
+            return true;
+        }
         break;
 
     case OP_NUM_MAIN_PONE_IN: // 此状态未启用
@@ -57,7 +64,6 @@ bool DFA::trans(char _iptc) {
             stateTo(OP_DBL_ACC);
             return true;
         }
-        else return false;
         break;
 
     case NUM10_MAIN_INPUTING_DIGIT: // 2
@@ -90,7 +96,6 @@ bool DFA::trans(char _iptc) {
         else if (_iptc == 'X') { //接2进制整数图
             return true;
         }
-        else return true;
         break;
 
     case NUM10_FLT_DOT_IN: // 5
@@ -98,7 +103,6 @@ bool DFA::trans(char _iptc) {
             stateTo(NUM10_FLT_INPUTING_DIGIT);
             return true;
         }
-        else return false;
         break;
     
     case NUM10_FLT_INPUTING_DIGIT: //6
@@ -110,7 +114,6 @@ bool DFA::trans(char _iptc) {
             stateTo(NUM10_FLT_INDEX_E_IN);
             return true;
         } 
-        else return false;
         break;
 
     case NUM10_FLT_INDEX_E_IN: // 7
@@ -122,7 +125,6 @@ bool DFA::trans(char _iptc) {
             stateTo(NUM10_FLT_INDEX_PONE_IN);
             return true;
         }
-        else return false;
         break;
     
     case NUM10_FLT_INDEX_INPUT_DIGIT: // 8
@@ -130,7 +132,6 @@ bool DFA::trans(char _iptc) {
             stateTo(NUM10_FLT_INDEX_INPUT_DIGIT);
             return true;
         }
-        else return false;
         break;
 
     case NUM10_FLT_INDEX_PONE_IN: // 9
@@ -138,7 +139,6 @@ bool DFA::trans(char _iptc) {
             stateTo(NUM10_FLT_INDEX_INPUT_DIGIT);
             return true;
         }
-        else return false;
         break;
     
     case ID_FIRST_CHAR_IN: //10
@@ -168,6 +168,23 @@ bool DFA::trans(char _iptc) {
             return true;
         }
         break;
+    
+    case STR_QUO_IN: // 17
+        if (_iptc > 0) {
+            stateTo(STR_CHAR_INPUT);
+            return true;
+        }
+        break;
+    
+    case STR_CHAR_INPUT: //18
+        if (_iptc == '"') {
+            stateTo(STR_END_QUO_IN);
+            return true;
+        }
+        else if (_iptc > 0) {
+            stateTo(STR_CHAR_INPUT);
+            return true;
+        }
     }
     return false;
 }
@@ -201,7 +218,11 @@ token* DFA::bulidToken(_ACCstate _accKind, std::string _accString) {
     case _END:
         return new token(0);
         break;
+    case _STR:
+        return new stringToken({&_accString[1], &_accString[_accString.length() - 1]});
+        break;
     default:
+        return new errToken();
         break;
     }
 }
@@ -211,6 +232,7 @@ token* DFA::getToken(){
     std::string tempToken;
     char tempChar;
     while (tempChar = host->getNextChar()) {
+
         if (isEmptyChar(tempChar)) { // 被空白符分隔的串视为两个token
             if (state == DFAstate::START) continue;
             if (DFAstate::isStateAcc(state)) {
@@ -219,7 +241,7 @@ token* DFA::getToken(){
             } else {
                 throw(no_mode_matched(tempToken));
             }
-        }
+        } // 此处需修改来适配string
 
         tempToken.push_back(tempChar); // 空白符无论如何不能进入token中
         if (this->trans(tempChar)) {

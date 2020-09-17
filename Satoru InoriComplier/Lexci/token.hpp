@@ -20,16 +20,13 @@ public:
 
 class operaToken final : public token {
     _operType _otp = 0;
-    std::string _otpString;
 public:
-    explicit operaToken(std::string otps) : token(OPER), _otpString(otps) {
-        for (size_t i = 0; i < otps.size(); i++) {
-            _otp *= 256;
-            _otp += (uint16_t)otps[i];
-        }
+    explicit operaToken(std::string otps) : token(OPER) {
+        _otp = OPtoOTP(otps);
     }
-    inline std::string getValueString() { return _otpString; }
-    virtual void printToken() { std::cout << (int)type << ' ' << _otpString << ' ' << (int)_otp << ' ' << "operToken\n"; }
+    inline std::string getValueString() { return OTPtoOP(_otp); }
+    inline _operType getOTP() { return _otp; }
+    virtual void printToken() { std::cout << (int)type << ' ' << OTPtoOP(_otp) << ' ' << (int)_otp << ' ' << "operToken\n"; }
 };
 
 class numToken : public token {
@@ -57,6 +54,7 @@ public:
         if (_exV.front() == '-') value *= -1;
     }
     void printToken() override { 
+        if (!isGoodNumber) std::cout << "warning: overflow ";
         std::cout << (int)type << ' ' << (int)numtype << ' ' << exprValue << ' ' << value << ' ' << "intToken\n"; 
     }
     inline int64_t getValueNum() { 
@@ -84,6 +82,7 @@ public:
         }
     }
     void printToken() override { 
+        if (!isGoodNumber) std::cout << "warning: overflow";
         std::cout << (int)type << ' ' << (int)numtype << ' ' << exprValue << ' ' << value << ' ' << "UintToken\n"; 
     }
     inline uint64_t getValueNum() { 
@@ -112,6 +111,7 @@ public:
             }
         }
         for (size_t i = (_exV.front() == '-' || _exV.front() == '+') ? 1 : 0; i < dotLoca; i++) {
+            if (value > DBL_MAX / 10.0) isGoodNumber = false;
             res *= 10;
             res += _exV[i] - '0';
         }
@@ -127,11 +127,13 @@ public:
                 indexRes += _exV[i] - '0';
             }
             if (_exV[eLoca + 1] == '-') indexRes *= -1;
+            if (res > DBL_MAX / pow(10, std::max(indexRes, 1))) isGoodNumber = false;
             res = res * pow(10, indexRes);
         }
         value = res;
     }
     void printToken() override { 
+        if (!isGoodNumber) std::cout << "warning: overflow ";
         std::cout << (int)type << ' ' << (int)numtype << ' ' << exprValue << ' ' << value << ' ' << "fltToken\n"; 
     }
     inline double_t getValueNum() { 
@@ -148,7 +150,7 @@ class stringToken final : public token {
 public:
     explicit stringToken(const std::string &_str) : token(STR), exprValue(_str) {};
     void printToken() override { 
-        std::cout << (int)type << ' ' << exprValue << ' ' << "stringToken\n"; 
+        std::cout << (int)type << " \"" << exprValue << "\" " << "stringToken\n"; 
     }
     inline std::string getValueString() { return exprValue; }
 };

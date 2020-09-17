@@ -4,8 +4,15 @@
 #include "lex.h"
 #include "DFA.h"
 
-lexAna::lexAna(std::string _file) 
-    : fileName(_file), lineNumber(1), lastLineNumber(1), nowPoint(-1), lastPoint(-1), bufferSize(4096) {
+lexAna::lexAna(std::string _file) : 
+    fileName(_file), 
+    lineNumber(1), 
+    lastLineNumber(1), 
+    nowPoint(-1), 
+    lastPoint(-1), 
+    bufferSize(4096), 
+    listNumber(1),
+    lastListNumber(1) {
     infile.open(_file, std::ios::in | std::ios::binary);
     if (!infile) isInfileGood = false;
     dfaProcess = new DFA(this);
@@ -41,8 +48,8 @@ token* lexAna::getNextToken() {
     try {
         return this->dfaProcess->getToken();
     } catch (STRExpection e) {
-        std::cout << lineNumber << ' ';
-        std::cout << e.what << "\n";
+        std::cout << e.what;
+        std::cout << " at " << '[' << lineNumber << ',' << listNumber << ']' << "\n";
         return new errToken();
     }
 }
@@ -51,7 +58,7 @@ char lexAna::getNextChar() {
     if (!isInfileGood) { //未能正确读取文件
         throw(can_not_open_file(fileName));
     }
-    lastPoint = nowPoint, lastLineNumber = lineNumber;
+    lastPoint = nowPoint, lastLineNumber = lineNumber, lastListNumber = listNumber;
     char tempChar = newCharFromBuffer();
     while (isEmptyChar(tempChar) && isEmptyChar(lastChar)) 
         tempChar = newCharFromBuffer();
@@ -67,6 +74,7 @@ char lexAna::newCharFromBuffer() {
     lastChar = nowChar;
     char tempChar;
     nowPoint++;
+    listNumber++;
     nowPoint = nowPoint % 8192;
     if (nowPoint % 4096 == 0) isRefilled = false;
     if (nowPoint < 4096) {
@@ -82,7 +90,10 @@ char lexAna::newCharFromBuffer() {
     }
     
 
-    if (tempChar == '\n') lineNumber++;
+    if (tempChar == '\n') {
+        lineNumber++;
+        listNumber = 1;
+    }
     nowChar = tempChar;
     return tempChar;
 }
@@ -93,6 +104,7 @@ void lexAna::pointReturn() {
     }
     nowPoint = lastPoint;
     lineNumber = lastLineNumber;
+    listNumber = lastListNumber;
     return;
 }
 

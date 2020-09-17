@@ -19,7 +19,7 @@ private:
     DFA(const DFA& _a); //屏蔽复制构造函数
     DFA& operator=(const DFA& _a); //屏蔽赋值
 public:
-    DFA(lexAna* _host);
+    explicit DFA(lexAna* _host);
     inline void reset();
     token* getToken();
 };
