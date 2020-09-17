@@ -1,3 +1,4 @@
+//GB2312
 #ifndef _LEX_HPP_
 #define _LEX_HPP_
 #include "lex.h"
@@ -14,7 +15,7 @@ lexAna::lexAna(std::string _file)
         bufferA[i] = infile.get();
     }
     for (auto &_keyWord : _remain) { //将保留字插入符号表
-        idTable[_keyWord.first] = remainToken(_keyWord.first, _keyWord.second);
+        idTable[_keyWord.first] = new remainToken(_keyWord.first, _keyWord.second);
     }
 }
 
@@ -22,13 +23,17 @@ bool lexAna::findInIdTable(std::string _str) {
     return idTable.find(_str) != idTable.end(); 
 }
 
-inline std::unordered_map<std::string, token> lexAna::getIdTable() { 
+inline std::unordered_map<std::string, token*> lexAna::getIdTable() { 
     return idTable; 
 }
 
-bool lexAna::insertTable(idToken _idT) {
-    if (findInIdTable(_idT.getValueString())) return false;
-    else idTable[_idT.getValueString()] = _idT;
+char lexAna::getLastChar() {
+    return lastChar;
+}
+
+bool lexAna::insertTable(idToken* _idT) {
+    if (findInIdTable(_idT->getValueString())) return false;
+    else idTable[_idT->getValueString()] = _idT;
     return true;
 }
 
@@ -36,10 +41,10 @@ token* lexAna::getNextToken() {
     try {
         return this->dfaProcess->getToken();
     } catch (STRExpection e) {
+        std::cout << lineNumber << ' ';
         std::cout << e.what << "\n";
         return new errToken();
     }
-    
 }
 
 char lexAna::getNextChar() {
@@ -62,18 +67,20 @@ char lexAna::newCharFromBuffer() {
     lastChar = nowChar;
     char tempChar;
     nowPoint++;
+    nowPoint = nowPoint % 8192;
+    if (nowPoint % 4096 == 0) isRefilled = false;
     if (nowPoint < 4096) {
         tempChar = bufferA[nowPoint];
-        if (nowPoint >= 4096 / 2) {
+        if (nowPoint >= 4096 / 2 && !isRefilled) {
             this->fillBuffer(&bufferB);
         }
     } else {
         tempChar = bufferB[nowPoint - 4096];
-        if (nowPoint >= 4096 * 3 / 2) {
+        if (nowPoint >= 4096 * 3 / 2 && !isRefilled) {
             this->fillBuffer(&bufferA);
         }
     }
-    nowPoint = nowPoint % 8192;
+    
 
     if (tempChar == '\n') lineNumber++;
     nowChar = tempChar;
@@ -90,10 +97,11 @@ void lexAna::pointReturn() {
 }
 
 void lexAna::fillBuffer(std::string* _buf) {
-    _buf->resize(bufferSize, 0);
+    std::for_each(_buf->begin(), _buf->end(), [](auto &temp){ temp = 0; });
     for (size_t i = 0; i < _buf->size() && !infile.eof(); i++) {
         _buf->operator[](i) = infile.get();
     }
+    isRefilled = true;
     return;
 }
 #endif

@@ -1,3 +1,4 @@
+//GB2312
 #ifndef _DFA_CPP_
 #define _DFA_CPP_
 #include "DFA.h"
@@ -20,10 +21,6 @@ bool DFA::trans(char _iptc) {
             stateTo(NUM10_MAIN_INPUTING_DIGIT);
             return true;
         } 
-        else if (_iptc == '+' || _iptc == '-') {
-            stateTo(NUM_MAIN_PONE_IN);
-            return true;
-        } 
         else if (_iptc == '0') {
             stateTo(NUM_MAIN_FIRST_ZERO_IN);
             return true;
@@ -36,14 +33,30 @@ bool DFA::trans(char _iptc) {
             stateTo(ID_FIRST_CHAR_IN);
             return true;
         }
+        else if (isReptbOperatorChar(_iptc)) {
+            stateTo(OP_RPTB_FIRST_IN);
+            return true;
+        }
+        else if (isSingleOperatorChar(_iptc)) {
+            stateTo(OP_SINGLE_CHAR_IN);
+            return true;
+        }
+        else if (isOpreatorCharOnlyDblWEqual(_iptc)) {
+            stateTo(OP_NOMDBL_FIRST_IN);
+            return true;
+        }
         else return false;
         break;
 
-    case NUM_MAIN_PONE_IN: // 1
+    case OP_NUM_MAIN_PONE_IN: // ´Ë×´Ì¬Î´ÆôÓÃ
         if (isDigit(_iptc)) {
             stateTo(NUM10_MAIN_INPUTING_DIGIT);
             return true;
         } 
+        if (_iptc == '=' || _iptc == host->getLastChar()) {
+            stateTo(OP_DBL_ACC);
+            return true;
+        }
         else return false;
         break;
 
@@ -134,12 +147,34 @@ bool DFA::trans(char _iptc) {
             return true;
         }
         break;
+
+    case ID_CHAR_INPUT: // 11
+        if (isIdChar(_iptc) || isDigit(_iptc)) {
+            stateTo(ID_CHAR_INPUT);
+            return true;
+        }
+        break;
+
+    case OP_NOMDBL_FIRST_IN: // 14
+        if (_iptc == '=') {
+            stateTo(OP_DBL_ACC);
+            return true;
+        }
+        break;
+
+    case OP_RPTB_FIRST_IN: // 16
+        if (_iptc == '=' || _iptc == host->getLastChar()) {
+            stateTo(OP_DBL_ACC);
+            return true;
+        }
+        break;
     }
+    return false;
 }
 
 token* DFA::bulidToken(_ACCstate _accKind, std::string _accString) {
     using namespace DFAstate;
-    if (host->findInIdTable(_accString)) return &host->idTable[_accString];
+    if (host->findInIdTable(_accString)) return host->idTable[_accString];
     switch (_accKind) {
     case _NUM10_INT:
         return new intToken(_accString);
@@ -156,10 +191,13 @@ token* DFA::bulidToken(_ACCstate _accKind, std::string _accString) {
     case _ID: 
         {
             idToken* tempToken = new idToken(_accString);
-            host->insertTable(*tempToken);
+            host->insertTable(tempToken);
             return tempToken;
             break;
         }
+    case _OP:
+        return new operaToken(_accString);
+        break;
     case _END:
         return new token(0);
         break;

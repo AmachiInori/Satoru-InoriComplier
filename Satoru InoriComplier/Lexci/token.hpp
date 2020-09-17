@@ -1,3 +1,4 @@
+//GB2312
 #include "base.hpp"
 #ifndef _TOKEN_HPP_
 #define _TOKEN_HPP_
@@ -6,16 +7,29 @@ class token {
 protected:
     _tokenType type;
 public:
-    explicit token(int tt = 0) : type(tt) {}; // type为0特指结束
+    explicit token(int tt = 0) : type(tt) {}; // type为0特指结束,为-1指错误
     inline _tokenType getTokenType() { return type; }
     virtual void printToken() { std::cout << (int)type << ' ' << "baseToken\n"; }
 };
 
-class errToken : public token {
+class errToken final : public token {
 public:
     explicit errToken() : token(-1) {}; // type为0特指结束
-    inline _tokenType getTokenType() { return type; }
     virtual void printToken() { std::cout << (int)type << ' ' << "ERRTOKEN\n"; }
+};
+
+class operaToken final : public token {
+    _operType _otp = 0;
+    std::string _otpString;
+public:
+    explicit operaToken(std::string otps) : token(OPER), _otpString(otps) {
+        for (size_t i = 0; i < otps.size(); i++) {
+            _otp *= 256;
+            _otp += (uint16_t)otps[i];
+        }
+    }
+    inline std::string getValueString() { return _otpString; }
+    virtual void printToken() { std::cout << (int)type << ' ' << _otpString << ' ' << (int)_otp << ' ' << "operToken\n"; }
 };
 
 class numToken : public token {
@@ -162,7 +176,7 @@ public:
         token::type = REMAIN;
     }
     void printToken() override { 
-        std::cout << (int)type << ' ' << idValue << ' ' << (int)_kt << "remainToken\n"; 
+        std::cout << (int)type << ' ' << idValue << ' ' << (int)_kt << " remainToken\n"; 
     }
 };
 

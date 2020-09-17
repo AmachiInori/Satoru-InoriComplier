@@ -1,3 +1,4 @@
+//GB2312
 #include "lex.h"
 #include "DFA.h"
 
