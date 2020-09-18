@@ -53,6 +53,7 @@ public:
         }
         if (_exV.front() == '-') value *= -1;
     }
+    explicit intToken(const int64_t _int) : value(_int), numToken(std::string(std::to_string(_int)), INT) { }
     void printToken() override { 
         if (!isGoodNumber) std::cout << "warning: overflow ";
         std::cout << (int)type << ' ' << (int)numtype << ' ' << exprValue << ' ' << value << ' ' << "intToken\n"; 
@@ -147,10 +148,27 @@ public:
 
 class stringToken final : public token {
     std::string exprValue;
+    std::string originValue;
 public:
-    explicit stringToken(const std::string &_str) : token(STR), exprValue(_str) {};
+    explicit stringToken(const std::string &_str) : token(STR), originValue(_str) {
+        for (size_t i = 0; i < originValue.size(); i++) {
+            if (originValue[i] == '\n' || originValue[i] == '\r') {
+                originValue.erase(i, 1);
+                i--;
+            }
+        }
+        for (size_t i = 0; i < originValue.size(); i++) {
+            if (i != originValue.size() - 1 && originValue[i] == '\\') {
+                char tempChar = _str[i + 1];
+                exprValue.push_back(ctrlChartoASC2(tempChar));
+                i++;
+            } else {
+                exprValue.push_back(originValue[i]);
+            }
+        }
+    }
     void printToken() override { 
-        std::cout << (int)type << " \"" << exprValue << "\" " << "stringToken\n"; 
+        std::cout << (int)type << " \"" << originValue << "\" " << " " + exprValue << " stringToken\n"; 
     }
     inline std::string getValueString() { return exprValue; }
 };

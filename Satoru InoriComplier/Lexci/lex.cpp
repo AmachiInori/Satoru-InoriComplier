@@ -47,7 +47,7 @@ bool lexAna::insertTable(idToken* _idT) {
 token* lexAna::getNextToken() {
     try {
         return this->dfaProcess->getToken();
-    } catch (STRExpection e) {
+    } catch (const STRExpection &e) {
         std::cout << e.what;
         std::cout << " at " << '[' << lineNumber << ',' << listNumber << ']' << "\n";
         return new errToken();
@@ -60,8 +60,10 @@ char lexAna::getNextChar() {
     }
     lastPoint = nowPoint, lastLineNumber = lineNumber, lastListNumber = listNumber;
     char tempChar = newCharFromBuffer();
+/*
     while (isEmptyChar(tempChar) && isEmptyChar(lastChar)) 
         tempChar = newCharFromBuffer();
+*/
     if (tempChar == '#') {
         tempChar = newCharFromBuffer();
         while (tempChar != '#' && tempChar != 0)
@@ -98,7 +100,7 @@ char lexAna::newCharFromBuffer() {
     return tempChar;
 }
 
-void lexAna::pointReturn() {
+void lexAna::_pointReturn() {
     if (nowPoint == lastPoint) {
         throw(can_not_return_back(nowPoint));
     }
@@ -106,6 +108,16 @@ void lexAna::pointReturn() {
     lineNumber = lastLineNumber;
     listNumber = lastListNumber;
     return;
+}
+
+void lexAna::pointReturn() {
+    try {
+        this->_pointReturn();
+    }
+    catch(const STRExpection& e) {
+        std::cout << e.what << '\n';
+    }
+    
 }
 
 void lexAna::fillBuffer(std::string* _buf) {

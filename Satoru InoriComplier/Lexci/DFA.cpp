@@ -53,6 +53,10 @@ bool DFA::trans(char _iptc) {
             stateTo(STR_QUO_IN);
             return true;
         }
+        else if (_iptc == '\'') {
+            stateTo(CHAR_SQUO_IN);
+            return true;
+        }
         break;
 
     case OP_NUM_MAIN_PONE_IN: // 此状态未启用
@@ -170,19 +174,51 @@ bool DFA::trans(char _iptc) {
         break;
     
     case STR_QUO_IN: // 17
-        if (_iptc > 0) {
+        if (_iptc == '"') {
+            stateTo(STR_END_QUO_IN);
+        }
+        else if (_iptc > 0) {
             stateTo(STR_CHAR_INPUT);
             return true;
         }
         break;
     
     case STR_CHAR_INPUT: //18
-        if (_iptc == '"') {
+        if (_iptc == '"' && host->getLastChar() != '\\') {
             stateTo(STR_END_QUO_IN);
             return true;
         }
         else if (_iptc > 0) {
             stateTo(STR_CHAR_INPUT);
+            return true;
+        }
+        break;
+
+    case CHAR_SQUO_IN: // 20
+        if (_iptc == '\'') {
+            stateTo(CHAR_ACC);
+            return true;
+        }
+        else if (_iptc == '\\') {
+            stateTo(CHAR_WAIT_CTRL_CHAR);
+            return true;
+        }
+        else if (_iptc > 0) {
+            stateTo(CHAR_WAIT_SQUO);
+            return true;
+        }
+        break;
+    
+    case CHAR_WAIT_SQUO: // 21
+        if (_iptc == '\'') {
+            stateTo(CHAR_ACC);
+            return true;
+        }
+        break;
+    
+    case CHAR_WAIT_CTRL_CHAR: // 23
+        if (_iptc > 0) {
+            stateTo(CHAR_WAIT_SQUO);
             return true;
         }
     }
@@ -205,8 +241,7 @@ token* DFA::bulidToken(_ACCstate _accKind, std::string _accString) {
     case _NUM10_UINT:
         return new UintToken(std::string(&_accString[0], &_accString[_accString.size() - 1]));
         break;
-    case _ID: 
-        {
+    case _ID: {
             idToken* tempToken = new idToken(_accString);
             host->insertTable(tempToken);
             return tempToken;
@@ -221,6 +256,13 @@ token* DFA::bulidToken(_ACCstate _accKind, std::string _accString) {
     case _STR:
         return new stringToken({&_accString[1], &_accString[_accString.length() - 1]});
         break;
+    case _CHAR: {
+            if (_accString.length() == 3) {
+                return new intToken((int16_t)_accString[1]);
+            } else {
+                return new intToken(ctrlChartoASC2(_accString[2]));
+            }
+        }
     default:
         return new errToken();
         break;
@@ -230,9 +272,14 @@ token* DFA::bulidToken(_ACCstate _accKind, std::string _accString) {
 token* DFA::getToken(){
     this->reset();
     std::string tempToken;
-    char tempChar;
-    while (tempChar = host->getNextChar()) {
-
+    char tempChar = 0;
+    while (1) {
+        try {tempChar = host->getNextChar();}
+        catch (const STRExpection& e) {
+            std::cout << e.what;
+            return new token();
+        }
+        /*
         if (isEmptyChar(tempChar)) { // 被空白符分隔的串视为两个token
             if (state == DFAstate::START) continue;
             if (DFAstate::isStateAcc(state)) {
@@ -242,8 +289,9 @@ token* DFA::getToken(){
                 throw(no_mode_matched(tempToken));
             }
         } // 此处需修改来适配string
-
-        tempToken.push_back(tempChar); // 空白符无论如何不能进入token中
+        */
+        if (state == DFAstate::START) tempToken.erase(tempToken.begin(), tempToken.end());
+        tempToken.push_back(tempChar);
         if (this->trans(tempChar)) {
             if (DFAstate::isStateAcc(state)) {
                 std::pair<_ACCstate, _ACCaction> tempAcc = DFAstate::getAccState(state);

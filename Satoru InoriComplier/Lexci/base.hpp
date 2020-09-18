@@ -19,14 +19,18 @@ static const _tokenType ID = 1, NUM = 2, STR = 3, REMAIN = 4, OPER = 5;
 static const _numType INT = 1, FLT = 2;
 static const _keyWordType TRUE = 1, FALSE = 2, IF = 3, ELSE = 4, ELIF = 5, GOTO = 6, SWITCH = 7, WHILE = 8, UNTIL = 9,
     FOR = 10, DO = 11, CONTINUE = 12, BREAK = 13, RETURN = 14, KWINT = 15, KWFLT = 16, KWCHAR = 17, KWLONG = 18, KWSHT = 19,
-    KWDBL = 20, UNSIGNED = 21, SIGNED = 22, VOID = 23, CONST = 24, IN = 25;
+    KWDBL = 20, UNSIGNED = 21, SIGNED = 22, VOID = 23, CONST = 24, IN = 25, FUNCTION = 26, RETURNS = 27, LIST = 28, PRIVATE = 29,
+    PUBLIC = 30, CLASS = 31;
 const static std::unordered_map<std::string, _keyWordType> _remain = {
     {"true", TRUE}, {"false", FALSE}, 
     {"if", IF}, {"else", ELSE}, {"elif", ELIF}, {"goto", GOTO}, {"switch", SWITCH}, 
     {"while", WHILE}, {"until", UNTIL}, {"for", FOR}, {"do", DO}, {"continue", CONTINUE}, {"break", BREAK}, 
     {"return", RETURN}, {"in", IN},
     {"int", KWINT}, {"float", KWFLT}, {"char", KWCHAR}, {"long", KWLONG}, {"short", KWSHT}, {"double", KWDBL}, 
-    {"unsigned", UNSIGNED}, {"signed", SIGNED}, {"void", VOID}, {"const", CONST}
+    {"unsigned", UNSIGNED}, {"signed", SIGNED}, {"void", VOID}, {"const", CONST},
+    {"function", FUNCTION}, {"returns", RETURNS},
+    {"list", LIST}, {"class", CLASS},
+    {"private", PRIVATE}, {"public", PUBLIC}
 };
 
 inline bool isKeyWord(std::string _id) {
@@ -38,7 +42,7 @@ inline bool isAlphabet(char _c) { return (_c >= 'a' && _c <= 'z') || (_c >= 'A' 
 inline bool isIdChar(char _c) { return isAlphabet(_c) || _c == '_'; }
 inline bool isSingleOperatorChar(char _c) { 
     const static std::unordered_set<char> _oper = {
-        '[', ']', '.', ',', '(', ')', ';', '{', '}'
+        '[', ']', '.', ',', '(', ')', ';', '{', '}', ':'
     };
     if (_oper.find(_c) != _oper.end()) return true;
     else return false;
@@ -59,6 +63,28 @@ inline bool isOpreatorCharOnlyDblWEqual(char _c) { // 后仅仅可以接续自己
 }
 inline bool isEmptyChar(char _c) { return _c == ' ' || _c == '\n' || _c == '\r' || _c == -1 || _c == '#'; }
 inline bool isSynChar(char _c) { return _c == '{' || _c == '}'; } // 同步词法单元
+inline char ctrlChartoASC2(char _c) {
+    switch (_c) {
+    case 'a':
+        return 7;
+    case 'b':
+        return 8;
+    case 't':
+        return 9;
+    case 'n':
+        return 10;
+    case 'v':
+        return 11;
+    case 'f':
+        return 12;
+    case 'r':
+        return 13;
+    case '0':
+        return 0;
+    default:
+        return _c;
+    }
+}
 //做一下分隔符;
 
 inline _operType OPtoOTP(std::string _op) {
@@ -103,6 +129,10 @@ namespace DFAstate {
     static const _DFAstate STR_QUO_IN = 17;
     static const _DFAstate STR_CHAR_INPUT = 18;
     static const _DFAstate STR_END_QUO_IN = 19;
+    static const _DFAstate CHAR_SQUO_IN = 20;
+    static const _DFAstate CHAR_WAIT_SQUO = 21;
+    static const _DFAstate CHAR_ACC = 22;
+    static const _DFAstate CHAR_WAIT_CTRL_CHAR = 23;
     static const _DFAstate END = UINT16_MAX;
 
     static const _ACCstate _NUM10_INT = 1;
@@ -112,6 +142,7 @@ namespace DFAstate {
     static const _ACCstate _ID = 5;
     static const _ACCstate _OP = 6;
     static const _ACCstate _STR = 7;
+    static const _ACCstate _CHAR = 8;
     static const _ACCstate _END = UINT16_MAX;
 
     static std::unordered_map<_DFAstate, std::pair<_ACCstate, _ACCaction>> _acctable = {
@@ -128,6 +159,7 @@ namespace DFAstate {
         {OP_DBL_ACC, {_OP, 0}},
         {OP_RPTB_FIRST_IN, {_OP, 1}},
         {STR_END_QUO_IN, {_STR, 0}},
+        {CHAR_ACC, {_CHAR, 0}},
         {END, {_END, 0}}
     };
     inline bool isStateAcc(_DFAstate _state) { return _acctable.find(_state) != _acctable.end(); }

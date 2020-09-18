@@ -1,5 +1,24 @@
-"accasd2  2ase"
+function mainProcess(list[int] a) returns int {
+    int sum = 0;
+    for (int num) : a {
+        sum += num;
+    }
+    return sum;
+}
 
+class member in drawFunc {
+private:
+    int a;
+    int b;
+    int c;
+public : in fb, fc
 
-asd
-2
+}
+
+      "     
+      123"
+
+""
+
+'1'
+'\n'

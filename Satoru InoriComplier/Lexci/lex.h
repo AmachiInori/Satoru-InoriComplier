@@ -22,6 +22,7 @@ private:
     
     std::string bufferA, bufferB;
     
+    void _pointReturn();
     void fillBuffer(std::string* _buf);
     char newCharFromBuffer();
     bool insertTable(idToken* _idT);
