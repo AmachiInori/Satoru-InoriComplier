@@ -143,11 +143,12 @@
     <ClInclude Include="Lexci\DFA.h" />
     <ClInclude Include="Lexci\lex.h" />
     <ClInclude Include="Lexci\token.hpp" />
+    <ClInclude Include="lexical.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="lexciTest.cpp" />
     <ClCompile Include="Lexci\DFA.cpp" />
     <ClCompile Include="Lexci\lex.cpp" />
-    <ClCompile Include="Lexci\lexciTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
