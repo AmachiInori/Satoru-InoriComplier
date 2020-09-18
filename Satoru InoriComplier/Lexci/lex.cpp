@@ -128,4 +128,8 @@ void lexAna::fillBuffer(std::string* _buf) {
     isRefilled = true;
     return;
 }
+
+lexAna::~lexAna(){
+    delete this->dfaProcess;
+}
 #endif

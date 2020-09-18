@@ -15,13 +15,16 @@ private:
     inline void stateTo(_DFAstate newState);
     bool trans(char _iptc);
     token* bulidToken(_ACCstate _accKind, std::string _accString);
-
-    DFA(const DFA& _a); //屏蔽复制构造函数
-    DFA& operator=(const DFA& _a); //屏蔽赋值
-public:
+    std::vector<token*> newedToken;
+    
+    friend class lexAna; // 向词法分析器的接口
     explicit DFA(lexAna* _host);
+    ~DFA();
     inline void reset();
     token* getToken();
+
+    DFA(const DFA& banned); // 覆盖缺省类方法
+    DFA& operator=(const DFA& banned);
 };
 
 #endif

@@ -228,45 +228,49 @@ bool DFA::trans(char _iptc) {
 token* DFA::bulidToken(_ACCstate _accKind, std::string _accString) {
     using namespace DFAstate;
     if (host->findInIdTable(_accString)) return host->idTable[_accString];
+    token* resToken;
     switch (_accKind) {
     case _NUM10_INT:
-        return new intToken(_accString);
+        resToken = new intToken(_accString);
         break;
     case _NUM10_FLT:
-        return new floatToken(_accString);
+        resToken = new floatToken(_accString);
         break;
     case _NUM10_FLT_WITHE:
-        return new floatToken(_accString);
+        resToken = new floatToken(_accString);
         break;
     case _NUM10_UINT:
-        return new UintToken(std::string(&_accString[0], &_accString[_accString.size() - 1]));
+        resToken = new UintToken(std::string(&_accString[0], &_accString[_accString.size() - 1]));
         break;
     case _ID: {
             idToken* tempToken = new idToken(_accString);
+            resToken = tempToken;
             host->insertTable(tempToken);
-            return tempToken;
-            break;
         }
+        break;
     case _OP:
-        return new operaToken(_accString);
+        resToken = new operaToken(_accString);
         break;
     case _END:
-        return new token(0);
+        resToken = new token(0);
         break;
     case _STR:
-        return new stringToken({&_accString[1], &_accString[_accString.length() - 1]});
+        resToken = new stringToken({&_accString[1], &_accString[_accString.length() - 1]});
         break;
     case _CHAR: {
             if (_accString.length() == 3) {
-                return new intToken((int16_t)_accString[1]);
+                resToken = new intToken((int16_t)_accString[1]);
             } else {
-                return new intToken(ctrlChartoASC2(_accString[2]));
+                resToken = new intToken(ctrlChartoASC2(_accString[2]));
             }
-        }
+        };
+        break;
     default:
-        return new errToken();
+        resToken = new errToken();
         break;
     }
+    newedToken.push_back(resToken);
+    return resToken;
 }
 
 token* DFA::getToken(){
@@ -314,6 +318,12 @@ token* DFA::getToken(){
     }
 
     return new token();
+}
+
+DFA::~DFA() {
+    for_each(newedToken.begin(), newedToken.end(), [](auto &ptToken) {
+        delete ptToken;
+    });
 }
 
 #endif
