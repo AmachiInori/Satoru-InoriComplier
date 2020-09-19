@@ -1,4 +1,4 @@
-//GB2312
+//comment by GB2312
 #include "base.hpp"
 #ifndef _TOKEN_HPP_
 #define _TOKEN_HPP_

@@ -1,3 +1,9 @@
+# 词法分析器
+
+## 基本架构
+
+## 词法规约
+
 `token`是基类
 - `type` token类型，通过getTokenType()访问
 - 构造函数传char类型的tokentype

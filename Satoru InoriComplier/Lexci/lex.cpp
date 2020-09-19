@@ -1,4 +1,4 @@
-//GB2312
+//comment by GB2312
 #ifndef _LEX_HPP_
 #define _LEX_HPP_
 #include "lex.h"
@@ -12,7 +12,9 @@ lexAna::lexAna(std::string _file) :
     lastPoint(-1), 
     bufferSize(4096), 
     listNumber(1),
-    lastListNumber(1) {
+    lastListNumber(1), 
+    nowChar(0), 
+    lastChar(0) {
     infile.open(_file, std::ios::in | std::ios::binary);
     if (!infile) isInfileGood = false;
     dfaProcess = new DFA(this);
@@ -48,7 +50,7 @@ token* lexAna::getNextToken() {
     try {
         return this->dfaProcess->getToken();
     } catch (const STRExpection &e) {
-        std::cout << e.what;
+        std::cerr << e.what;
         std::cout << " at " << '[' << lineNumber << ',' << listNumber << ']' << "\n";
         return new errToken();
     }
@@ -56,7 +58,8 @@ token* lexAna::getNextToken() {
 
 char lexAna::getNextChar() {
     if (!isInfileGood) { //未能正确读取文件
-        throw(can_not_open_file(fileName));
+        infile.close();
+        throw(fatal_can_not_open_file(fileName));
     }
     lastPoint = nowPoint, lastLineNumber = lineNumber, lastListNumber = listNumber;
     char tempChar = newCharFromBuffer();
@@ -90,7 +93,6 @@ char lexAna::newCharFromBuffer() {
             this->fillBuffer(&bufferA);
         }
     }
-    
 
     if (tempChar == '\n') {
         lineNumber++;
@@ -102,7 +104,8 @@ char lexAna::newCharFromBuffer() {
 
 void lexAna::_pointReturn() {
     if (nowPoint == lastPoint) {
-        throw(can_not_return_back(nowPoint));
+        infile.close();
+        throw(fatal_can_not_return_back(nowPoint));
     }
     nowPoint = lastPoint;
     lineNumber = lastLineNumber;
@@ -111,11 +114,9 @@ void lexAna::_pointReturn() {
 }
 
 void lexAna::pointReturn() {
-    try {
-        this->_pointReturn();
-    }
+    try { this->_pointReturn(); } 
     catch(const STRExpection& e) {
-        std::cout << e.what << '\n';
+        std::cerr << e.what << '\n';
     }
     
 }
@@ -131,5 +132,6 @@ void lexAna::fillBuffer(std::string* _buf) {
 
 lexAna::~lexAna(){
     delete this->dfaProcess;
+    infile.close();
 }
 #endif

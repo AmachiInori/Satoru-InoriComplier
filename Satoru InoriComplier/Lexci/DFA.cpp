@@ -1,4 +1,4 @@
-//GB2312
+//comment by GB2312
 #ifndef _DFA_CPP_
 #define _DFA_CPP_
 #include "DFA.h"
@@ -278,10 +278,10 @@ token* DFA::getToken(){
     std::string tempToken;
     char tempChar = 0;
     while (1) {
-        try {tempChar = host->getNextChar();}
-        catch (const STRExpection& e) {
-            std::cout << e.what;
-            return new token();
+        try { tempChar = host->getNextChar(); }
+        catch (const fatal_can_not_open_file& e) {
+            std::cerr << e.what;
+            return new token(-1);
         }
         /*
         if (isEmptyChar(tempChar)) { // 被空白符分隔的串视为两个token
@@ -316,12 +316,11 @@ token* DFA::getToken(){
             }
         }
     }
-
     return new token();
 }
 
 DFA::~DFA() {
-    for_each(newedToken.begin(), newedToken.end(), [](auto &ptToken) {
+    for_each(newedToken.begin(), newedToken.end(), [](const auto &ptToken) {
         delete ptToken;
     });
 }

@@ -1,4 +1,4 @@
-//GB2312
+//comment by GB2312
 #ifndef _LEX_H_
 #define _LEX_H_
 #include "base.hpp"

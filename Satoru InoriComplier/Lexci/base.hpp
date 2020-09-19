@@ -1,4 +1,4 @@
-//GB2312
+//comment by GB2312
 #ifndef _LEXBASE_HPP_
 #define _LEXBASE_HPP_
 #include <string>
@@ -197,18 +197,25 @@ public:
         errorString(_ofns), STRExpection("no mode matched with " + _ofns) {};
 };
 
-class can_not_return_back : public STRExpection {
+class fatal_can_not_return_back : public STRExpection {
     size_t errorLine;
 public:
-    explicit can_not_return_back(size_t _ofns) : 
+    explicit fatal_can_not_return_back(size_t _ofns) : 
         errorLine(_ofns), STRExpection("buffer can't return back at line " + _ofns) {};
 };
 
-class can_not_open_file : public STRExpection {
+class fatal_can_not_open_file : public STRExpection {
     std::string errorString;
 public:
-    explicit can_not_open_file(std::string &_file) :
+    explicit fatal_can_not_open_file(std::string &_file) :
         errorString(_file), STRExpection("file wrong " + _file) {};
 };
+
+class fatal_lex_break_down : public STRExpection { //向语法分析器抛的，为了整合两个词法分析严重错误 但目前使用token(-1)来表示词法分析器的严重错误
+public:
+    explicit fatal_lex_break_down() :
+        STRExpection("lex break down ") {};
+};
+
 
 #endif
