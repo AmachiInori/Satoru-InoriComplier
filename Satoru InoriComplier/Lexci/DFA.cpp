@@ -221,6 +221,7 @@ bool DFA::trans(char _iptc) {
             stateTo(CHAR_WAIT_SQUO);
             return true;
         }
+        break;
     }
     return false;
 }
@@ -266,7 +267,7 @@ token* DFA::bulidToken(_ACCstate _accKind, std::string _accString) {
         };
         break;
     default:
-        resToken = new errToken();
+        resToken = new token(-1);
         break;
     }
     newedToken.push_back(resToken);
@@ -281,7 +282,7 @@ token* DFA::getToken(){
         try { tempChar = host->getNextChar(); }
         catch (const fatal_can_not_open_file& e) {
             std::cerr << e.what;
-            return new token(-1);
+            return nullptr;
         }
         /*
         if (isEmptyChar(tempChar)) { // 被空白符分隔的串视为两个token
@@ -308,7 +309,11 @@ token* DFA::getToken(){
                 std::pair<_ACCstate, _ACCaction> tempAcc = DFAstate::getAccState(state);
                 if (tempAcc.second == 1) {
                     tempToken.pop_back();
-                    host->pointReturn();
+                    try{ host->pointReturn(); }
+                    catch(const STRExpection& e) {
+                        std::cerr << e.what << '\n';
+                        return nullptr;
+                    }
                 }
                 return bulidToken(tempAcc.first, tempToken);
             } else {
@@ -316,7 +321,7 @@ token* DFA::getToken(){
             }
         }
     }
-    return new token();
+    return nullptr;
 }
 
 DFA::~DFA() {

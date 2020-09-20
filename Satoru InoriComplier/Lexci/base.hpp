@@ -17,7 +17,7 @@ typedef int _keyWordType;
 typedef uint16_t _operType;
 
 static const _tokenType ID = 1, NUM = 2, STR = 3, REMAIN = 4, OPER = 5;
-static const _numType INT = 1, FLT = 2;
+static const _numType INT = 1, FLT = 2, CHAR = 3;
 static const _keyWordType TRUE = 1, FALSE = 2, IF = 3, ELSE = 4, ELIF = 5, GOTO = 6, SWITCH = 7, WHILE = 8, UNTIL = 9,
     FOR = 10, DO = 11, CONTINUE = 12, BREAK = 13, RETURN = 14, KWINT = 15, KWFLT = 16, KWCHAR = 17, KWLONG = 18, KWSHT = 19,
     KWDBL = 20, UNSIGNED = 21, SIGNED = 22, VOID = 23, CONST = 24, IN = 25, FUNCTION = 26, RETURNS = 27, LIST = 28, PRIVATE = 29,

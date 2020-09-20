@@ -12,12 +12,6 @@ public:
     virtual void printToken() { std::cout << (int)type << ' ' << "baseToken\n"; }
 };
 
-class errToken final : public token {
-public:
-    explicit errToken() : token(-1) {}; // type为0特指结束
-    virtual void printToken() { std::cout << (int)type << ' ' << "ERRTOKEN\n"; }
-};
-
 class operaToken final : public token {
     _operType _otp = 0;
 public:
@@ -53,7 +47,8 @@ public:
         }
         if (_exV.front() == '-') value *= -1;
     }
-    explicit intToken(const int64_t _int) : value(_int), numToken(std::string(std::to_string(_int)), INT) { }
+    explicit intToken(const int64_t _int) : value(_int), numToken(std::string(std::to_string(_int)), CHAR) { }
+
     void printToken() override { 
         if (!isGoodNumber) std::cout << "warning: overflow ";
         std::cout << (int)type << ' ' << (int)numtype << ' ' << exprValue << ' ' << value << ' ' << "intToken\n"; 

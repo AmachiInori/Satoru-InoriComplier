@@ -1,20 +1,69 @@
-# 词法分析器
+# Satoru词法分析器
 
 ## 基本架构
 
-## 词法规约
+### DFA.h DFA.cpp
 
-`token`是基类
-- `type` token类型，通过getTokenType()访问
-- 构造函数传char类型的tokentype
+这一组文件定义了词法分析所依赖的有限状态自动机。它通过头文件的交叉互联和友元权限来与词法分析主进程`lexAna`相连，同时构造和析构委托至`lexAna`。这个类使用了堆空间来存放词法单元并且在析构函数中开解这些堆空间，应注意在语法分析完成前不应主动调用lexAna的析构函数。
 
-`numToken`数字类 也是基类
-- `exprValue`是模式匹配接受得到的字面字符串
-- `numtype`是数字类型，char
-- 构造函数传字面串和数字类型
 
-`intToken`整数类 final 此处需要可移植性优化
-整形量的规约是$((+|-)?digit^+U)$
+`host`->`lexAna* const` 指向主进程类，在构造函数中传入并赋值。  
+`state`->`_DFAstate` 指明目前自动机的状态，初始值是`DFAstate::START`。  
+`lastState`->`_DFAstate` 记录上一状态以支持向前看，初始值是`DFAstate::START`。  
+`newedToken`->`std::vector<token*>` 记录所有堆空间中的`token`实例的指针，以供析构函数释放
+
+`stateTo`->`inline void (_DFAstate)`   
+state和laststate的更新，封装为内联函数以复用。只在本类内部调用。不抛出异常。  
+
+`trans`->`bool (char)`   
+状态转移。内含整个状态转移表。  
+返回值为1表示状态转移接受，为0表示状态转移失败。  
+有可能抛出异常的方法调用但是闭合的，不抛出异常。
+
+`buildToken`->`token*(_ACCstate, std::string)`  
+传入状态接受类型和接受的字符串，先在符号表中查找，如有则直接返回，如无则在堆中开辟空间，将指针压入`newedToken`并返回。  
+不抛出异常。
+
+`DFA`->`explicit {cons}(lexAna*)`  
+构造函数。传入词法分析主类的指针。不允许抛出异常。  
+
+`reset`->`inline void()`  
+重置自动机状态，目前仅在`getToken()`中调用一次。不抛出异常。  
+
+`getToken`->`token* ()`  
+向主类的接口。返回一个指向下一词法单元的指针。方法本身不产生堆空间但调用的方法会产生。  
+抛出`no_mode_matched`异常给`lexAna`来表示词法失配警告。  
+处理主类`getNextChar()`方法产生的致命异常`fatal_can_not_open_file`并返回一个`nullptr`给`lexAna`表示词法分析错误。  
+处理主类`pointReturn()`方法产生的致命异常`fatal_can_not_return_back`并返回一个`nullptr`给`lexAna`表示词法分析错误。  
+
+### token.hpp
+
+`token`  
+词法单元基类  
+`type`->`_tokenType` token类型，通过`getTokenType()`访问，  
+词法单元种类标识：标识符 `ID = 1`, 常数字面量 `NUM = 2`, 字符串字面量 `STR = 3`, 保留字 `REMAIN = 4`, 运算符 `OPER = 5`  
+特殊的词法单元种类：`type`为`0`表示输入结束，`type`为`-1`表示词法错误的词法单元，`type`为`-2`表示严重的词法分析故障，需要立即终止词法分析并析构类。  
+
+`operaToken`  
+运算符单元基类，继承自`token`  
+`_otp`->`_operType`表示运算符种类，由传入的`std::string`经过基数256转10而来。  
+此处未来可能需要建立一个(给人看的)表来方便语法分析的开发。  
+
+`numToken`  
+数字类，基类  
+`exprValue`->`std::string` 模式匹配接受得到的字面字符串
+`numtype`->`_numType` 数字类型，整形 `INT = 1`, 浮点 `FLT = 2`, 字符 `CHAR = 3`  
+构造函数传入上述两个值
+
+`intToken`  
+整数类 / 字符类，final  
+此处需要可移植性优化  
+整形量的规约是$((+|-)?digit^+U)$  
+`value`->`int64_t` 记录该词法单元的字面量大小  
+`isGoodNumber`->`bool` 记录是否存在溢出  
+`intToken(const std::string&)` 内置了字符串转整数的过程，适配整形输入
+`intToken(const int64_t)` 适配字符类输入  
+注意 目前对于溢出的限制还很宽松  
 
 `floatToken`浮点类 规约是
 $((+|-)?digit^+.digit^+)|((+|-)?digit^+.digit^+(e|E)(+|-)?digit^+)$
@@ -25,3 +74,6 @@ $((+|-)?digit^+.digit^+)|((+|-)?digit^+.digit^+(e|E)(+|-)?digit^+)$
 
 `stringToken`字符串字面量类，默认不要引号
 
+### lexical.hpp
+
+是一个外部模块，封装了词法分析器并为语法分析提供词法分析器的中间接口和缓冲区。同时使用这个类，如后端接收到词法单元`-2`的致命错误，可以通过堆栈辗转开解来自动调用析构释放空间。

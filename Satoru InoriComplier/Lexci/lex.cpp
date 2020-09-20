@@ -4,6 +4,10 @@
 #include "lex.h"
 #include "DFA.h"
 
+token _emptyToken(0);
+token _errToken(-1);
+token _fatalToken(-2);
+
 lexAna::lexAna(std::string _file) : 
     fileName(_file), 
     lineNumber(1), 
@@ -47,13 +51,16 @@ bool lexAna::insertTable(idToken* _idT) {
 }
 
 token* lexAna::getNextToken() {
+    token* resToken;
     try {
-        return this->dfaProcess->getToken();
-    } catch (const STRExpection &e) {
+        resToken = this->dfaProcess->getToken();
+    } catch (const no_mode_matched &e) {
         std::cerr << e.what;
         std::cout << " at " << '[' << lineNumber << ',' << listNumber << ']' << "\n";
-        return new errToken();
+        return &_errToken;
     }
+    if (!resToken) return &_fatalToken; // 表示词法分析出现严重故障，需后端立即终止词法分析并析构
+    else return resToken;
 }
 
 char lexAna::getNextChar() {
@@ -114,11 +121,7 @@ void lexAna::_pointReturn() {
 }
 
 void lexAna::pointReturn() {
-    try { this->_pointReturn(); } 
-    catch(const STRExpection& e) {
-        std::cerr << e.what << '\n';
-    }
-    
+    this->_pointReturn();
 }
 
 void lexAna::fillBuffer(std::string* _buf) {
