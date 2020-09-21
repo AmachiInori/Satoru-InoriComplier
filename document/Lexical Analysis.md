@@ -6,16 +6,15 @@
 
 这一组文件定义了词法分析所依赖的有限状态自动机。它通过头文件的交叉互联和友元权限来与词法分析主进程`lexAna`相连，同时构造和析构委托至`lexAna`。这个类使用了堆空间来存放词法单元并且在析构函数中开解这些堆空间，应注意在语法分析完成前不应主动调用lexAna的析构函数。
 
-
 `host`->`lexAna* const` 指向主进程类，在构造函数中传入并赋值。  
 `state`->`_DFAstate` 指明目前自动机的状态，初始值是`DFAstate::START`。  
 `lastState`->`_DFAstate` 记录上一状态以支持向前看，初始值是`DFAstate::START`。  
 `newedToken`->`std::vector<token*>` 记录所有堆空间中的`token`实例的指针，以供析构函数释放
 
-`stateTo`->`inline void (_DFAstate)`   
+`stateTo`->`inline void (_DFAstate)`  
 state和laststate的更新，封装为内联函数以复用。只在本类内部调用。不抛出异常。  
 
-`trans`->`bool (char)`   
+`trans`->`bool (char)`  
 状态转移。内含整个状态转移表。  
 返回值为1表示状态转移接受，为0表示状态转移失败。  
 有可能抛出异常的方法调用但是闭合的，不抛出异常。

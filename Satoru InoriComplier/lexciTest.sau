@@ -8,9 +8,9 @@ function mainProcess(list[int] a) returns int {
 
 class member in drawFunc {
 private:
-    int a;
-    int b;
-    int c;
+    int a1;
+    int a2;
+    int a3;
 public : in fb, fc
 
 }

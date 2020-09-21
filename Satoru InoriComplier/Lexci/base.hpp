@@ -39,6 +39,8 @@ inline bool isKeyWord(std::string _id) {
     else return false;
 }
 inline bool isDigit(char _c) { return _c >= '0' && _c <= '9'; }
+inline bool isNum2Digit(char _c) { return _c == '0' || _c == '1'; }
+inline bool isNum16Digit(char _c) { return isDigit(_c) || (_c >= 'A' && _c <= 'F') || (_c >= 'a' && _c <= 'f'); }
 inline bool isAlphabet(char _c) { return (_c >= 'a' && _c <= 'z') || (_c >= 'A' && _c <= 'Z'); }
 inline bool isIdChar(char _c) { return isAlphabet(_c) || _c == '_'; }
 inline bool isSingleOperatorChar(char _c) { 
@@ -104,6 +106,26 @@ inline std::string OTPtoOP(_operType _optp) {
     }
     return res;
 }
+inline int64_t Num2toNum10(std::string _N2String) {
+    int64_t res = 0;
+    for (size_t i = 0; i < _N2String.size(); i++) {
+        res *= 2;
+        res += (int8_t)(_N2String[i] == '1');
+    }
+    return res;
+}
+inline int64_t Num16toNum10(std::string _N16String) {
+    static const std::unordered_map<char, int8_t> num16Digit =  {
+        {'1', 1}, {'2', 2}, {'3', 3}, {'4', 4}, {'5', 5}, {'6', 6}, {'7', 7}, {'8', 8}, {'9', 9}, {'A', 10},
+        {'B', 11}, {'C', 12}, {'D', 13}, {'E', 14}, {'F', 15}, {'0', 0}
+    };
+    int64_t res = 0;
+    for (size_t i = 0; i < _N16String.size(); i++) {
+        res *= 16;
+        res += num16Digit.find(_N16String[i])->second;
+    }
+    return res;
+}
 
 typedef uint16_t _DFAstate;
 typedef uint16_t _ACCstate;
@@ -121,8 +143,7 @@ namespace DFAstate {
     static const _DFAstate NUM10_FLT_INDEX_PONE_IN = 9;
     static const _DFAstate NUM10_FLT_INDEX_INPUT_DIGIT = 8;
     static const _DFAstate ID_FIRST_CHAR_IN = 10;
-    static const _DFAstate ID_CHAR_INPUT = 11;
-    //12号无了(悲)
+    static const _DFAstate ID_CHAR_INPUT = 11;  //12号无了(悲)
     static const _DFAstate OP_SINGLE_CHAR_IN = 13;
     static const _DFAstate OP_NOMDBL_FIRST_IN = 14;
     static const _DFAstate OP_DBL_ACC = 15;
