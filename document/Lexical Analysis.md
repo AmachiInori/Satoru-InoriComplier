@@ -63,16 +63,48 @@ state和laststate的更新，封装为内联函数以复用。只在本类内部调用。不抛出异常。
 `intToken(const std::string&)` 内置了字符串转整数的过程，适配整形输入
 `intToken(const int64_t)` 适配字符类输入  
 注意 目前对于溢出的限制还很宽松  
+默认底层实现使用补码表示，故以正数形式累加，以64位有符号整数(long long)保存  
+`if (value > LLONG_MAX / 10.0)`判断溢出，但不在构造函数里抛expection（否则就太业余了  
+标记下来，在`getValueNum()`里抛，`int_cstexpe_overflow`表示溢出异常(现在的版本还没抛)  
 
 `floatToken`浮点类 规约是
 $((+|-)?digit^+.digit^+)|((+|-)?digit^+.digit^+(e|E)(+|-)?digit^+)$
 
-默认底层实现使用补码表示，故以正数形式累加，以64位有符号整数(long long)保存
-`if (value > LLONG_MAX / 10.0)`判断溢出，但不在构造函数里抛expection（否则就太业余了
-标记下来，在`getValueNum()`里抛，`int_cstexpe_overflow`表示溢出异常
-
 `stringToken`字符串字面量类，默认不要引号
+
+### lex.h lex.cpp
+
+头部声明且定义了三个全局变量，是在本文件及`lexical.hpp`引用的三种特殊的`token`以供异常处理使用，且能方便地管理内存。  
+
+`lexAna`是词法分析前端，直接操作文件句柄读取文件。  
+
+`isRefilled`->`bool` 表示(非当前读取)的另一个缓冲区是否已经被填充。初始化为`false`(其实没关系)  
+`lineNumber`->`size_t` 表示当前的行号，以供报错使用  
+`lastLineNumber`->`size_t` 表示上一次成功读取时的行号，以供回退使用  
+`listNumber, lastListNumber`->`size_t` 同理，列号  
+`nowPoint`->`size_t` **刚刚被传入分析的缓冲区位置**，初始化为`-1`(`UINT32_MAX`)
+`lastPoint`->`size_t` 上两次被传入分析的缓冲区位置，初始化为`-1`(`UINT32_MAX`)
+`nowChar`->`char` 我也不知道设计这个是干嘛的 可能假酒喝多了 应该是回退用 别删  
+`lastChar`->`char` 回退用的上一次成功读取时的字符  
+`bufferSize`->`const size_t` 默认是4096，每一个buffer串的大小(是为了不在程序中出现乱七八糟的常数字面量)  
+`isInfileGood`->`bool` 表示文件是否被正常打开，抛异常的基准，小心维护  
+`idTable`->`std::unordered_map<std::string, token*>` 
+简单符号表，用指针作`token`类的寻址依据，空间由`DFA`创建，记得别乱析构  
+应当确保所有idTable中的元素均在堆空间
+`infile`->`std::ifstream` 输入文件流，默认ios binary  
+`fileName`->`std::string` 输入文件的地址  
+`dfaProcess`->`DFA*` 自动机类的指针，初始化时new  
+`bufferA, bufferB`->`std::string` 双缓冲区的缓冲区  
+
+`_pointReturn`->`void()`  
+回退的内层方法，用两层是为了打算处理异常，但现在用更外层处理了。  
+抛出致命异常`fatal_can_not_return_back`  
+虽然抛出异常，但遗憾的是目前这个方法现在没人调用  
+
+`fillBuffer`->`void(std::string* _buf)`  
+重新填满`_buf`指向的缓冲区  
+不抛出异常
 
 ### lexical.hpp
 
-是一个外部模块，封装了词法分析器并为语法分析提供词法分析器的中间接口和缓冲区。同时使用这个类，如后端接收到词法单元`-2`的致命错误，可以通过堆栈辗转开解来自动调用析构释放空间。
+是一个外部模块，封装了词法分析器并为语法分析提供词法分析器的中间接口和缓冲区。同时使用这个类，如后端接收到词法单元`-2`的致命错误，可以通过堆栈辗转开解来自动调用析构释放空间。 

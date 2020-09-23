@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Version: Do not edit
+ * @Autor: AmachiInori
+ * @Date: 2020-09-19 01:42:27
+ * @LastEditors: AmachiInori
+ */
 #ifndef STR_LEXICAL
 #define STR_LEXICAL
 #include "Lexci/DFA.h"

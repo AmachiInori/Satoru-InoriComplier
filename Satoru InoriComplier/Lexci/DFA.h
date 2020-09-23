@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Version: Do not edit
+ * @Autor: AmachiInori
+ * @Date: 2020-09-16 16:29:32
+ * @LastEditors: AmachiInori
+ */
 //GB2312
 #ifndef _DFA_H_
 #define _DFA_H_

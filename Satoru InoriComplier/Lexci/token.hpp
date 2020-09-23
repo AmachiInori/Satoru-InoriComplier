@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Version: Do not edit
+ * @Autor: AmachiInori
+ * @Date: 2020-09-13 01:01:45
+ * @LastEditors: AmachiInori
+ */
 //comment by GB2312
 #include "base.hpp"
 #ifndef _TOKEN_HPP_
@@ -66,7 +73,7 @@ class UintToken final : public numToken {
     uint64_t value = 0;
     bool isGoodNumber = true;
 public:
-    explicit UintToken(const std::string &_exV) : numToken(_exV, INT) {
+    explicit UintToken(const std::string &_exV) : numToken(_exV, UINT) {
         for (size_t i = (_exV.front() == '-' || _exV.front() == '+') ? 1 : 0; i < _exV.length(); i++) {
             if (value > UINT64_MAX / 10.0) isGoodNumber = false;
             value *= 10;
@@ -77,6 +84,7 @@ public:
             value -= value;
         }
     }
+    explicit UintToken(const int64_t _int) : value(_int), numToken(std::string(std::to_string(_int)), UINT) { }
     void printToken() override { 
         if (!isGoodNumber) std::cout << "warning: overflow";
         std::cout << (int)type << ' ' << (int)numtype << ' ' << exprValue << ' ' << value << ' ' << "UintToken\n"; 

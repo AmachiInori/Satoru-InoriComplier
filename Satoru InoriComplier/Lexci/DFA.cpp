@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Version: Do not edit
+ * @Autor: AmachiInori
+ * @Date: 2020-09-16 16:21:12
+ * @LastEditors: AmachiInori
+ */
 //comment by GB2312
 #ifndef _DFA_CPP_
 #define _DFA_CPP_
@@ -91,13 +98,22 @@ bool DFA::trans(char _iptc) {
     case NUM_MAIN_FIRST_ZERO_IN: // 4
         if (isDigit(_iptc)) {
             stateTo(NUM10_MAIN_INPUTING_DIGIT);
-            host->pointReturn(); // 此处回退一格，不会遇到双回退情况
+            return true;
+        }
+        else if (_iptc == '.') {
+            stateTo(NUM10_FLT_DOT_IN);
+            return true;
+        }
+        else if (_iptc == 'u' || _iptc == 'U') {
+            stateTo(NUM10_ACCEPT_UNSIGNED_INT);
             return true;
         }
         else if (_iptc == 'x') { //接16进制整数图
+            stateTo(NUM16_X_IN);
             return true;
         }
         else if (_iptc == 'X') { //接2进制整数图
+            stateTo(NUM2_X_IN);
             return true;
         }
         break;
@@ -222,6 +238,42 @@ bool DFA::trans(char _iptc) {
             return true;
         }
         break;
+
+    case NUM2_X_IN: // 24
+        if (isNum2Digit(_iptc)) {
+            stateTo(NUM2_DIGIT_INPUT);
+            return true;
+        }
+        break;
+    
+    case NUM2_DIGIT_INPUT: // 26
+        if (isNum2Digit(_iptc)) {
+            stateTo(NUM2_DIGIT_INPUT);
+            return true;
+        }
+        else if (_iptc == 'u' || _iptc == 'U') {
+            stateTo(NUM2_ACCEPT_UNSIGNED_INT);
+            return true;
+        } 
+        break;
+    
+    case NUM16_X_IN : // 28
+        if (isNum16Digit(_iptc)) {
+            stateTo(NUM16_DIGIT_INPUT);
+            return true;
+        }
+        break;
+    
+    case NUM16_DIGIT_INPUT: // 30 
+        if (isNum16Digit(_iptc)) {
+            stateTo(NUM16_DIGIT_INPUT);
+            return true;
+        }
+        else if (_iptc == 'u' || _iptc == 'U') {
+            stateTo(NUM16_ACCEPT_UNSIGNED_INT);
+            return true;
+        } 
+        break;
     }
     return false;
 }
@@ -265,6 +317,18 @@ token* DFA::bulidToken(_ACCstate _accKind, std::string _accString) {
                 resToken = new intToken(ctrlChartoASC2(_accString[2]));
             }
         };
+        break;
+    case _NUM2_INT:
+        resToken = new intToken(Num2toNum10(_accString.substr(2, _accString.size() - 2)));
+        break;
+    case _NUM2_UINT:
+        resToken = new UintToken(Num2toNum10(_accString.substr(2, _accString.size() - 3)));
+        break;
+    case _NUM16_INT:
+        resToken = new intToken(Num16toNum10(_accString.substr(2, _accString.size() - 2)));
+        break;
+    case _NUM16_UINT:
+        resToken = new UintToken(Num16toNum10(_accString.substr(2, _accString.size() - 3)));
         break;
     default:
         resToken = new token(-1);

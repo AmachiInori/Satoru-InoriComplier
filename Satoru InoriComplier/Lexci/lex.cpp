@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Version: Do not edit
+ * @Autor: AmachiInori
+ * @Date: 2020-09-14 01:03:56
+ * @LastEditors: AmachiInori
+ */
 //comment by GB2312
 #ifndef _LEX_HPP_
 #define _LEX_HPP_
@@ -19,6 +26,7 @@ lexAna::lexAna(std::string _file) :
     lastListNumber(1), 
     nowChar(0), 
     lastChar(0) {
+        
     infile.open(_file, std::ios::in | std::ios::binary);
     if (!infile) isInfileGood = false;
     dfaProcess = new DFA(this);
@@ -87,16 +95,16 @@ char lexAna::newCharFromBuffer() {
     char tempChar;
     nowPoint++;
     listNumber++;
-    nowPoint = nowPoint % 8192;
-    if (nowPoint % 4096 == 0) isRefilled = false;
-    if (nowPoint < 4096) {
+    nowPoint = nowPoint % (bufferSize * 2);
+    if (nowPoint % bufferSize == 0) isRefilled = false;
+    if (nowPoint < bufferSize) {
         tempChar = bufferA[nowPoint];
-        if (nowPoint >= 4096 / 2 && !isRefilled) {
+        if (nowPoint >= bufferSize / 2 && !isRefilled) {
             this->fillBuffer(&bufferB);
         }
     } else {
-        tempChar = bufferB[nowPoint - 4096];
-        if (nowPoint >= 4096 * 3 / 2 && !isRefilled) {
+        tempChar = bufferB[nowPoint - bufferSize];
+        if (nowPoint >= bufferSize * 3 / 2 && !isRefilled) {
             this->fillBuffer(&bufferA);
         }
     }

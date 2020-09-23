@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Version: Do not edit
+ * @Autor: AmachiInori
+ * @Date: 2020-09-13 01:19:59
+ * @LastEditors: AmachiInori
+ */
 //comment by GB2312
 #ifndef _LEXBASE_HPP_
 #define _LEXBASE_HPP_
@@ -17,7 +24,7 @@ typedef int _keyWordType;
 typedef uint16_t _operType;
 
 static const _tokenType ID = 1, NUM = 2, STR = 3, REMAIN = 4, OPER = 5;
-static const _numType INT = 1, FLT = 2, CHAR = 3;
+static const _numType INT = 1, FLT = 2, CHAR = 3, UINT = 4;
 static const _keyWordType TRUE = 1, FALSE = 2, IF = 3, ELSE = 4, ELIF = 5, GOTO = 6, SWITCH = 7, WHILE = 8, UNTIL = 9,
     FOR = 10, DO = 11, CONTINUE = 12, BREAK = 13, RETURN = 14, KWINT = 15, KWFLT = 16, KWCHAR = 17, KWLONG = 18, KWSHT = 19,
     KWDBL = 20, UNSIGNED = 21, SIGNED = 22, VOID = 23, CONST = 24, IN = 25, FUNCTION = 26, RETURNS = 27, LIST = 28, PRIVATE = 29,
@@ -155,6 +162,12 @@ namespace DFAstate {
     static const _DFAstate CHAR_WAIT_SQUO = 21;
     static const _DFAstate CHAR_ACC = 22;
     static const _DFAstate CHAR_WAIT_CTRL_CHAR = 23;
+    static const _DFAstate NUM2_X_IN = 24;
+    static const _DFAstate NUM2_DIGIT_INPUT = 26;
+    static const _DFAstate NUM2_ACCEPT_UNSIGNED_INT = 27;
+    static const _DFAstate NUM16_X_IN = 28;
+    static const _DFAstate NUM16_DIGIT_INPUT = 30;
+    static const _DFAstate NUM16_ACCEPT_UNSIGNED_INT = 31;
     static const _DFAstate END = UINT16_MAX;
 
     static const _ACCstate _NUM10_INT = 1;
@@ -165,11 +178,15 @@ namespace DFAstate {
     static const _ACCstate _OP = 6;
     static const _ACCstate _STR = 7;
     static const _ACCstate _CHAR = 8;
+    static const _ACCstate _NUM2_INT = 9;
+    static const _ACCstate _NUM16_INT = 10;
+    static const _ACCstate _NUM2_UINT = 11;
+    static const _ACCstate _NUM16_UINT = 12;
     static const _ACCstate _END = UINT16_MAX;
 
     static std::unordered_map<_DFAstate, std::pair<_ACCstate, _ACCaction>> _acctable = {
         {NUM10_MAIN_INPUTING_DIGIT, {_NUM10_INT, 1}},
-        {NUM_MAIN_FIRST_ZERO_IN, {_NUM10_INT, 0}},
+        {NUM_MAIN_FIRST_ZERO_IN, {_NUM10_INT, 1}},
         {OP_NUM_MAIN_PONE_IN, {_OP, 1}},
         {NUM10_ACCEPT_UNSIGNED_INT, {_NUM10_UINT, 0}},
         {NUM10_FLT_INPUTING_DIGIT, {_NUM10_FLT, 1}},
@@ -182,6 +199,10 @@ namespace DFAstate {
         {OP_RPTB_FIRST_IN, {_OP, 1}},
         {STR_END_QUO_IN, {_STR, 0}},
         {CHAR_ACC, {_CHAR, 0}},
+        {NUM2_DIGIT_INPUT, {_NUM2_INT, 1}},
+        {NUM16_DIGIT_INPUT, {_NUM16_INT, 1}},
+        {NUM2_ACCEPT_UNSIGNED_INT, {_NUM2_UINT, 0}},
+        {NUM16_ACCEPT_UNSIGNED_INT, {_NUM16_UINT, 0}},
         {END, {_END, 0}}
     };
     inline bool isStateAcc(_DFAstate _state) { return _acctable.find(_state) != _acctable.end(); }

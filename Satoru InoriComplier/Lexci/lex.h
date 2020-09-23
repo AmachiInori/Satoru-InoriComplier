@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Version: Do not edit
+ * @Autor: AmachiInori
+ * @Date: 2020-09-16 16:38:17
+ * @LastEditors: AmachiInori
+ */
 //comment by GB2312
 #ifndef _LEX_H_
 #define _LEX_H_
@@ -8,7 +15,7 @@
 class DFA;
 class lexAna {
 private:
-    bool isRefilled = true;
+    bool isRefilled = false;
     size_t lineNumber, lastLineNumber;
     size_t listNumber, lastListNumber;
     size_t nowPoint, lastPoint; //np表示刚刚被传入分析的char
