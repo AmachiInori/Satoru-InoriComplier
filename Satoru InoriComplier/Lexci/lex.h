@@ -49,7 +49,7 @@ public:
 
     // 向后端的接口 因为需要通过此处调试所以没有声明为友元+私有的形式
     token* getNextToken();
-    inline std::unordered_map<std::string, token*> getIdTable();
+    std::unordered_map<std::string, token*> getIdTable();
 };
 
 #endif

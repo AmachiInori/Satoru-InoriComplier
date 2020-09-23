@@ -15,7 +15,7 @@
 state和laststate的更新，封装为内联函数以复用。只在本类内部调用。不抛出异常。  
 
 `trans`->`bool (char)`  
-状态转移。内含整个状态转移表。  
+状态转移。内含整个[状态转移表](DFA.md)。  
 返回值为1表示状态转移接受，为0表示状态转移失败。  
 有可能抛出异常的方法调用但是闭合的，不抛出异常。
 
@@ -104,6 +104,32 @@ $((+|-)?digit^+.digit^+)|((+|-)?digit^+.digit^+(e|E)(+|-)?digit^+)$
 `fillBuffer`->`void(std::string* _buf)`  
 重新填满`_buf`指向的缓冲区  
 不抛出异常
+
+`newCharFromBuffer`->`char()`  
+从缓冲区拉取一个新字符并将游标向前推进1，不抛出异常  
+
+`insertTable`->`bool(idToken*)`  
+在简单符号表中插入一个新的标识符词法单元，插入成功返回1，如已存在则返回0，不抛出异常  
+
+`findInIdTable`->`bool(std::string)`  
+判断输入的串是否已经被插入到简单符号表中，不抛出异常  
+
+`getNextChar`->`char()`  
+向DFA的接口，从缓冲区拉取一个字符。  
+如输入文件错误则抛出致命异常`fatal_can_not_open_file`  
+
+`getLastChar`->`char()`  
+找到上一次拉取的字符，目前只在一个位置调用，不抛出异常  
+
+`pointReturn`->`void()`  
+缓冲区回退一格，见`_pointReturn`  
+
+`getNextToken`->`token*()`  
+向后端的最主要接口，返回下一个词法单元，不会泄漏异常。  
+致命错误会返回`-2`的`baseToken`，词法错误返回`-1`，输入终止返回`0`  
+
+`getIdTable`->`std::unordered_map<std::string, token*>()`  
+返回符号表
 
 ### lexical.hpp
 

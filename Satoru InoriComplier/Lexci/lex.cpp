@@ -44,7 +44,7 @@ bool lexAna::findInIdTable(std::string _str) {
     return idTable.find(_str) != idTable.end(); 
 }
 
-inline std::unordered_map<std::string, token*> lexAna::getIdTable() { 
+std::unordered_map<std::string, token*> lexAna::getIdTable() { 
     return idTable; 
 }
 
