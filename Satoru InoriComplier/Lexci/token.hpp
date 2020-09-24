@@ -6,7 +6,7 @@
  * @LastEditors: AmachiInori
  */
 //comment by GB2312
-#include "base.hpp"
+#include "lexciBase.hpp"
 #ifndef _TOKEN_HPP_
 #define _TOKEN_HPP_
 
@@ -194,6 +194,7 @@ public:
         idToken(_str), _kt(kt) {
         token::type = REMAIN;
     }
+    _keyWordType getKwdType() { return _kt; }
     void printToken() override { 
         std::cout << (int)type << ' ' << idValue << ' ' << (int)_kt << " remainToken\n"; 
     }

@@ -8,7 +8,7 @@
 //comment by GB2312
 #ifndef _LEX_H_
 #define _LEX_H_
-#include "base.hpp"
+#include "lexciBase.hpp"
 #include "token.hpp"
 #include "DFA.h"
 

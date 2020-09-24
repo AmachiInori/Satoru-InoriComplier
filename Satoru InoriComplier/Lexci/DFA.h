@@ -8,7 +8,7 @@
 //GB2312
 #ifndef _DFA_H_
 #define _DFA_H_
-#include "base.hpp"
+#include "lexciBase.hpp"
 #include "token.hpp"
 #include "lex.h"
 

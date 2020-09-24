@@ -54,21 +54,21 @@ inline bool isAlphabet(char _c) { return (_c >= 'a' && _c <= 'z') || (_c >= 'A' 
 inline bool isIdChar(char _c) { return isAlphabet(_c) || _c == '_'; }
 inline bool isSingleOperatorChar(char _c) { 
     const static std::unordered_set<char> _oper = {
-        '[', ']', '.', ',', '(', ')', ';', '{', '}', ':'
+        '[', ']', '.', ',', '(', ')', ';', '{', '}', ':', '~'
     };
     if (_oper.find(_c) != _oper.end()) return true;
     else return false;
 }
 inline bool isReptbOperatorChar(char _c) { // 后可以接续自己或者等号
     const static std::unordered_set<char> _oper = {
-        '/', '%', '&', '=', '<', '>', '|', '+', '-'
+        '&', '=', '<', '>', '|', '+', '-', '^'
     };
     if (_oper.find(_c) != _oper.end()) return true;
     else return false;
 }
 inline bool isOpreatorCharOnlyDblWEqual(char _c) { // 后仅仅可以接续自己
     const static std::unordered_set<char> _oper = {
-        '*', '^'
+        '*', '!', '%', '/'
     };
     if (_oper.find(_c) != _oper.end()) return true;
     else return false;
