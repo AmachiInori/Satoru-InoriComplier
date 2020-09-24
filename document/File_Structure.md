@@ -1,6 +1,6 @@
 # Satoru: Inori Complier
 
-## 文件结构
+## 鏂囦欢缁撴瀯
 
-- `/document` 官方文档
+- `/document` 瀹樻柟鏂囨。
   - `/document/DFA.md` 
