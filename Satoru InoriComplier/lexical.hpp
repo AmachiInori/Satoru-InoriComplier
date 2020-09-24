@@ -39,7 +39,7 @@ public:
         readPoint++;
         return this->lookForward(0);
     }
-    token* lookForward(size_t length) {
+    token* lookForward(size_t length) { // TODO 测试这个模块的工作情况
         while ((int64_t)readPoint + (int64_t)length >= (int64_t)tokenBuffer.size() && !isFinished) {
             this->_pullNextToken();
         } 
@@ -50,7 +50,7 @@ public:
             return tokenBuffer[readPoint + length];
         }
     }
-    token* lookBackward(size_t length) { //注意length不允许是负数
+    token* lookBackward(size_t length) { //注意length不允许是负数 // TODO 测试这个模块的工作情况
         if (readPoint - length < 0) return &_fatalToken; //不支持的操作
         return tokenBuffer[readPoint - length];
     }

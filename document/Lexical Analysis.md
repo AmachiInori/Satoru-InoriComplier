@@ -40,7 +40,7 @@ state和laststate的更新，封装为内联函数以复用。只在本类内部调用。不抛出异常。
 `token`  
 词法单元基类  
 `type`->`_tokenType` token类型，通过`getTokenType()`访问，  
-词法单元种类标识：标识符 `ID = 1`, 常数字面量 `NUM = 2`, 字符串字面量 `STR = 3`, 保留字 `REMAIN = 4`, 运算符 `OPER = 5`  
+词法单元种类标识：标识符 `ID = 1`, 常数字面量 `NUM = 2`, 字符串字面量 `STR = 3`, 保留字 `REMAIN = 4`, 运算符 `OPER = 5`
 特殊的词法单元种类：`type`为`0`表示输入结束，`type`为`-1`表示词法错误的词法单元，`type`为`-2`表示严重的词法分析故障，需要立即终止词法分析并析构类。  
 
 `operaToken`  
@@ -51,13 +51,12 @@ state和laststate的更新，封装为内联函数以复用。只在本类内部调用。不抛出异常。
 `numToken`  
 数字类，基类  
 `exprValue`->`std::string` 模式匹配接受得到的字面字符串
-`numtype`->`_numType` 数字类型，整形 `INT = 1`, 浮点 `FLT = 2`, 字符 `CHAR = 3`  
+`numtype`->`_numType` 数字类型，整形 `INT = 1`, 浮点 `FLT = 2`, 字符 `CHAR = 3`, 无符号`UINT = 4`  
 构造函数传入上述两个值
 
 `intToken`  
 整数类 / 字符类，final  
 此处需要可移植性优化  
-整形量的规约是$((+|-)?digit^+U)$  
 `value`->`int64_t` 记录该词法单元的字面量大小  
 `isGoodNumber`->`bool` 记录是否存在溢出  
 `intToken(const std::string&)` 内置了字符串转整数的过程，适配整形输入
@@ -66,11 +65,26 @@ state和laststate的更新，封装为内联函数以复用。只在本类内部调用。不抛出异常。
 默认底层实现使用补码表示，故以正数形式累加，以64位有符号整数(long long)保存  
 `if (value > LLONG_MAX / 10.0)`判断溢出，但不在构造函数里抛expection（否则就太业余了  
 标记下来，在`getValueNum()`里抛，`int_cstexpe_overflow`表示溢出异常(现在的版本还没抛)  
+对于负号的特判是冗余内容，在优化时可以删除  
 
-`floatToken`浮点类 规约是
-$((+|-)?digit^+.digit^+)|((+|-)?digit^+.digit^+(e|E)(+|-)?digit^+)$
+`UintToken`  
+除使用uint_64和UINT标记以外，其余内容与`intToken`完全一致
 
-`stringToken`字符串字面量类，默认不要引号
+`floatToken`  
+浮点类 规约是  
+
+`stringToken`  
+字符串字面量类  
+默认从DFA传来的匹配串没有引号  
+构造函数中转写了转义字符  
+
+`idToken`  
+标识符类  
+
+`remainToken`  
+保留字类  
+如果符号表正常，一定不主动被`new`，而是在`lexAna`构造时加入符号表中  
+保留字列表定义在`base.hpp`中  
 
 ### lex.h lex.cpp
 
@@ -133,4 +147,4 @@ $((+|-)?digit^+.digit^+)|((+|-)?digit^+.digit^+(e|E)(+|-)?digit^+)$
 
 ### lexical.hpp
 
-是一个外部模块，封装了词法分析器并为语法分析提供词法分析器的中间接口和缓冲区。同时使用这个类，如后端接收到词法单元`-2`的致命错误，可以通过堆栈辗转开解来自动调用析构释放空间。 
+是一个外部模块，封装了词法分析器并为语法分析提供词法分析器的中间接口和词法单元缓冲区。同时使用这个类，如后端接收到词法单元`-2`的致命错误，可以通过堆栈辗转开解来自动调用析构释放空间。  

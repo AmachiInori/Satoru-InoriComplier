@@ -182,7 +182,7 @@ protected:
 public:
     explicit idToken(const std::string &_str) : token(ID), idValue(_str) {
         if (isKeyWord(_str)) {
-            //错误情况，表示符号表没有正常生效
+            cout << "warning: idTable error\n";
         }
     }
     void printToken() override { 

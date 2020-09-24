@@ -10,7 +10,7 @@
 
 in `/Lexci/base.hpp`  
 
-`doubleCompChar`->`inline bool isOpreatorCharOnlyDblWEqual(char _c)`
+`doubleCompChar`->`inline bool isOpreatorCharOnlyDblWEqual(char _c)`  
 `[samechar]`->与之前输入的符号相同的符号**或`=`**  
 `repeatableChar`->`inline bool isReptbOperatorChar(char _c)`  
 `compChar`->`inline bool isSingleOperatorChar(char _c)`  
