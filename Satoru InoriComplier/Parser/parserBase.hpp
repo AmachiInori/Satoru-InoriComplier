@@ -1,6 +1,6 @@
 /*
- * @Description: 
- * @Version: Do not edit
+ * @Description: parserBase.hpp
+ * @Version: 
  * @Autor: AmachiInori
  * @Date: 2020-09-25 00:08:00
  * @LastEditors: AmachiInori

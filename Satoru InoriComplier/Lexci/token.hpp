@@ -1,6 +1,6 @@
 /*
- * @Description: 
- * @Version: Do not edit
+ * @Description: token.hpp
+ * @Version: 0.10
  * @Autor: AmachiInori
  * @Date: 2020-09-13 01:01:45
  * @LastEditors: AmachiInori

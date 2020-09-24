@@ -1,6 +1,6 @@
 /*
- * @Description: 
- * @Version: Do not edit
+ * @Description: lexical.hpp
+ * @Version: 0.10
  * @Autor: AmachiInori
  * @Date: 2020-09-19 01:42:27
  * @LastEditors: AmachiInori

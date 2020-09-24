@@ -1,6 +1,6 @@
 /*
- * @Description: 
- * @Version: Do not edit
+ * @Description: DFA.h
+ * @Version: 0.10
  * @Autor: AmachiInori
  * @Date: 2020-09-16 16:29:32
  * @LastEditors: AmachiInori

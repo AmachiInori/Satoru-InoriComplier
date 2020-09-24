@@ -1,6 +1,6 @@
 /*
- * @Description: 
- * @Version: Do not edit
+ * @Description: lexana major code
+ * @Version: 0.10
  * @Autor: AmachiInori
  * @Date: 2020-09-14 01:03:56
  * @LastEditors: AmachiInori
