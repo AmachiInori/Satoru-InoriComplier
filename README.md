@@ -41,4 +41,4 @@
 ## 关于作者
 
 Satoru之父(误)  
-努力脱离材料天坑的[@AmachiInori](amachi.com.cn)  
+努力脱离材料天坑的[@AmachiInori](http://amachi.com.cn)  
