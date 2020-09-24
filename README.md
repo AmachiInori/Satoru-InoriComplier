@@ -1,6 +1,6 @@
 # Satoru: Inori Complier
 
-## 这是什么？  
+## 这是什么?  
 
 这是一个新的编程语言，还处于雏形阶段。  
 不知道为什么突然想要写一个编程语言，然后就开始写了。  
@@ -26,6 +26,8 @@
 
 ## 文档目录
 
+- [Satoru手册](document/Satoru_Base.md)
+
 ### 文件结构
 
 - [文件结构](document/File_Structure.md)
@@ -35,3 +37,8 @@
 - [词法规约说明](document/Lexical_Rules.md)
 - [词法分析器的源代码文档](document/Lexical_Analysis.md)
 - [确定有限状态自动机的说明文档](document/DFA.md)
+
+## 关于作者
+
+Satoru之父(误)  
+努力脱离材料天坑的[@AmachiInori](amachi.com.cn)  

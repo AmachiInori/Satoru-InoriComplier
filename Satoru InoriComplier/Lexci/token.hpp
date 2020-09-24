@@ -180,11 +180,7 @@ class idToken : public token {
 protected:
     std::string idValue;
 public:
-    explicit idToken(const std::string &_str) : token(ID), idValue(_str) {
-        if (isKeyWord(_str)) {
-            cout << "warning: idTable error\n";
-        }
-    }
+    explicit idToken(const std::string &_str) : token(ID), idValue(_str) { }
     void printToken() override { 
         std::cout << (int)type << ' ' << idValue << ' '  << "idToken\n"; 
     }
