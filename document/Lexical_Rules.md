@@ -34,3 +34,11 @@ Satoru规定了如下几种词法单元：
 - 仅可单字符出现的运算符 $\bold{compChar}$
 - 可以单独出现、可以重复出现也可接续等号的运算符 $\bold{repeatableChar}(\bold{[sameChar]})?|\bold{repeatableChar}(\bold{=})?$
 - 可以单独出现、但仅可接续等号的运算符 $\bold{doubleCompChar}(\bold{=})?$
+
+## 词法错误修正
+
+Satoru词法分析采用**失配丢弃**策略，发现词法失配之后从下一个字符重启词法分析。  
+
+## 对于分隔符
+
+分隔符默认不特殊处理，但一般的状态转换边都不含有分隔符。
