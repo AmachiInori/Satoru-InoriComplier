@@ -63,8 +63,7 @@ token* lexAna::getNextToken() {
     try {
         resToken = this->dfaProcess->getToken();
     } catch (const no_mode_matched &e) {
-        std::cerr << e.what;
-        std::cout << " at " << '[' << lineNumber << ',' << listNumber << ']' << "\n";
+        e.printErr();
         return &_errToken;
     }
     if (!resToken) return &_fatalToken; // 表示词法分析出现严重故障，需后端立即终止词法分析并析构
@@ -120,7 +119,7 @@ char lexAna::newCharFromBuffer() {
 void lexAna::_pointReturn() {
     if (nowPoint == lastPoint) {
         infile.close();
-        throw(fatal_can_not_return_back(nowPoint));
+        throw(fatal_can_not_return_back(lineNumber, listNumber));
     }
     nowPoint = lastPoint;
     lineNumber = lastLineNumber;

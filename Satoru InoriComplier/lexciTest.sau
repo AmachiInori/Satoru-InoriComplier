@@ -5,7 +5,7 @@
 == >= <= > < !=
 
 3
-|| && ^ | & ~
+|| && ^ | &
 
 4
 << >>
@@ -17,10 +17,62 @@
 * % /
 
 7
-^ | & 
+++ --
 
 8
-! ++ --
+- ! ~
 
 9
 . :
+
+2 1 1 1 intToken
+2 1 1 1 intToken
+5 = 61 operToken
+5 += 11069 operToken
+5 -= 11581 operToken
+5 *= 10813 operToken
+5 /= 12093 operToken
+5 %= 9533 operToken
+2 1 2 2 intToken
+5 == 15677 operToken
+5 >= 15933 operToken
+5 <= 15421 operToken
+5 > 62 operToken
+5 < 60 operToken
+5 != 8509 operToken
+2 1 3 3 intToken
+5 || 31868 operToken
+5 && 9766 operToken
+5 ^ 94 operToken
+5 | 124 operToken
+5 & 38 operToken
+2 1 4 4 intToken
+5 << 15420 operToken
+5 >> 15934 operToken
+2 1 5 5 intToken
+5 + 43 operToken
+5 - 45 operToken
+2 1 6 6 intToken
+5 * 42 operToken
+5 % 37 operToken
+5 / 47 operToken
+
+2 1 7 7 intToken
+5 ^ 94 operToken
+5 | 124 operToken
+5 & 38 operToken
+2 1 8 8 intToken
+5 ++ 11051 operToken
+1 __ idToken
+2 1 9 9 intToken
+5 - 45 operToken
+5 ! 33 operToken
+5 ~ 126 operToken
+2 1 10 10 intToken
+5 . 46 operToken
+5 : 58 operToken
+0 baseToken
+
+C:\Users\Zhao Yufeng\Documents\VSCode\C++\Satoru InoriComplier\Debug\Satoru InoriComplier.exe (进程 31108)已退出，代码为 0。
+要在调试停止时自动关闭控制台，请启用“工具”->“选项”->“调试”->“调试停止时自动关闭控制台”。
+按任意键关闭此窗口. . .

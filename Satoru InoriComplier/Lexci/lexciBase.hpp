@@ -218,6 +218,14 @@ class STRExpection {
 public:
     std::string what;
     explicit STRExpection(std::string exMsg) : what(exMsg) {};
+    virtual void printErr() const { std::cerr << what << "\n"; }
+};
+
+class CodeExpection : public STRExpection {
+public: 
+    std::pair<size_t, size_t> location;
+    explicit CodeExpection(std::string exMsg, size_t _line, size_t _loca) : STRExpection(exMsg), location({_line, _loca}) {}
+    virtual void printErr() const override { std::cerr << what << '[' << location.first << ',' << location.second << ']' << '\n'; }
 };
 
 class int_cstexpe_overflow : public STRExpection {
@@ -234,18 +242,17 @@ public:
         overflowNumString(_ofns), STRExpection("float constexpr overflow in: " + _ofns) {};
 };
 
-class no_mode_matched : public STRExpection {
+class no_mode_matched : public CodeExpection {
     std::string errorString;
 public:
-    explicit no_mode_matched(std::string &_ofns) : 
-        errorString(_ofns), STRExpection("no mode matched with " + _ofns) {};
+    explicit no_mode_matched(std::string &_ofns, size_t _line, size_t _loca) : 
+        errorString(_ofns), CodeExpection("no mode matched with " + _ofns, _line, _loca) {};
 };
 
-class fatal_can_not_return_back : public STRExpection {
-    size_t errorLine;
+class fatal_can_not_return_back : public CodeExpection {
 public:
-    explicit fatal_can_not_return_back(size_t _ofns) : 
-        errorLine(_ofns), STRExpection("buffer can't return back at line " + _ofns) {};
+    explicit fatal_can_not_return_back(size_t _line, size_t _loca) : 
+        CodeExpection("buffer can't return back at ", _line, _loca) {};
 };
 
 class fatal_can_not_open_file : public STRExpection {

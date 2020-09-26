@@ -345,7 +345,7 @@ token* DFA::getToken(){
     while (1) {
         try { tempChar = host->getNextChar(); }
         catch (const fatal_can_not_open_file& e) {
-            std::cerr << e.what;
+            e.printErr();
             return nullptr;
         }
         /*
@@ -375,13 +375,13 @@ token* DFA::getToken(){
                     tempToken.pop_back();
                     try{ host->pointReturn(); }
                     catch(const STRExpection& e) {
-                        std::cerr << e.what << '\n';
+                        e.printErr();
                         return nullptr;
                     }
                 }
                 return bulidToken(tempAcc.first, tempToken);
             } else {
-                throw(no_mode_matched(tempToken));
+                throw(no_mode_matched(tempToken, host->lineNumber, host->listNumber));
             }
         }
     }
