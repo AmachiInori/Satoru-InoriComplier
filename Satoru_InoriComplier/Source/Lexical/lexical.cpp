@@ -8,8 +8,8 @@
 //comment by GB2312
 #ifndef _LEX_HPP_
 #define _LEX_HPP_
-#include "lex.h"
-#include "DFA.h"
+#include "lexical.h"
+#include "lexical_DFA.h"
 
 token _emptyToken(0);
 token _errToken(-1);

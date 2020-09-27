@@ -6,7 +6,7 @@ Satoru规定了如下几种词法单元：
 
 ### 常数字面量  
 
-非终结符号定义请参看[DFA.md](DFA.md)
+非终结符号定义请参看[Lexical_DFA](Lexical_DFA)
 
 - 十进制有符号整数 $\bold{digit10}^+$
 - 十进制无符号整数 $\bold{digit10}^+(\bold{U|u})$  

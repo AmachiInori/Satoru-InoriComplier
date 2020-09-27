@@ -8,8 +8,8 @@
 //comment by GB2312
 #ifndef _DFA_CPP_
 #define _DFA_CPP_
-#include "DFA.h"
-#include "lex.h"
+#include "lexical_DFA.h"
+#include "lexical.h"
 
 DFA::DFA(lexAna* _host) : host(_host) {}
 

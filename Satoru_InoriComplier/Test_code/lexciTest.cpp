@@ -1,7 +1,7 @@
 #include "../Include/lexical_analizer.hpp"
 
 int main(){
-    lexicalAnalysis proc("C:\\Users\\Zhao Yufeng\\Documents\\VSCode\\C++\\Satoru InoriComplier\\Satoru InoriComplier\\lexciTest.sau");
+    lexicalAnalysis proc("C:\\Users\\Zhao Yufeng\\Documents\\VSCode\\C++\\Satoru InoriComplier\\Satoru_InoriComplier\\Test_code\\lexciTest.sau");
     token* t = proc.lookForward(1);
     t->printToken();
     while (t->getTokenType() > 0 || t->getTokenType() == -1) {

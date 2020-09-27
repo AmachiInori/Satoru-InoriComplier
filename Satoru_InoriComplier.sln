@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Satoru InoriComplier", "Satoru InoriComplier\Satoru InoriComplier.vcxproj", "{3C92DA61-6FD5-41C2-BFC1-873CBEFA3D09}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Satoru_InoriComplier", "Satoru_InoriComplier\Satoru_InoriComplier.vcxproj", "{3C92DA61-6FD5-41C2-BFC1-873CBEFA3D09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

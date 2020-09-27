@@ -15,30 +15,33 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Lexci\base.hpp">
+    <ClInclude Include="Include\lexical_analizer.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Lexci\token.hpp">
+    <ClInclude Include="Include\lexical_base.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Lexci\DFA.h">
+    <ClInclude Include="Include\parser_base.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Lexci\lex.h">
+    <ClInclude Include="Include\token.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="lexical.hpp">
+    <ClInclude Include="Source\Lexical\lexical.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Lexical\lexical_DFA.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lexci\DFA.cpp">
+    <ClCompile Include="Source\Lexical\lexical.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Lexci\lex.cpp">
+    <ClCompile Include="Source\Lexical\lexical_DFA.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lexciTest.cpp">
+    <ClCompile Include="Test_code\lexciTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

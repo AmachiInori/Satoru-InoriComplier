@@ -18,6 +18,19 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\lexical_analizer.hpp" />
+    <ClInclude Include="Include\lexical_base.hpp" />
+    <ClInclude Include="Include\parser_base.hpp" />
+    <ClInclude Include="Include\token.hpp" />
+    <ClInclude Include="Source\Lexical\lexical.h" />
+    <ClInclude Include="Source\Lexical\lexical_DFA.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Lexical\lexical.cpp" />
+    <ClCompile Include="Source\Lexical\lexical_DFA.cpp" />
+    <ClCompile Include="Test_code\lexciTest.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -140,18 +153,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="Lexci\base.hpp" />
-    <ClInclude Include="Lexci\DFA.h" />
-    <ClInclude Include="Lexci\lex.h" />
-    <ClInclude Include="Lexci\token.hpp" />
-    <ClInclude Include="lexical.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="lexciTest.cpp" />
-    <ClCompile Include="Lexci\DFA.cpp" />
-    <ClCompile Include="Lexci\lex.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
