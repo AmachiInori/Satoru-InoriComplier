@@ -8,8 +8,8 @@
 //GB2312
 #ifndef _DFA_H_
 #define _DFA_H_
-#include "../Include/lexical_base.hpp"
-#include "../Include/token.hpp"
+#include "../../Include/lexical_base.hpp"
+#include "../../Include/token.hpp"
 #include "lexical.h"
 
 class lexAna;
