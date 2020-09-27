@@ -7,8 +7,8 @@
  */
 #ifndef STR_LEXICAL
 #define STR_LEXICAL
-#include "Lexci/DFA.h"
-#include "Lexci/lex.h"
+#include "../Source/Lexical/lexical.h"
+#include "../Source/Lexical/lexical_DFA.h"
 
 extern token _emptyToken;
 extern token _errToken;

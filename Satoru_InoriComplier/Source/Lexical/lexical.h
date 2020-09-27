@@ -8,9 +8,9 @@
 //comment by GB2312
 #ifndef _LEX_H_
 #define _LEX_H_
-#include "lexciBase.hpp"
-#include "token.hpp"
-#include "DFA.h"
+#include "../Include/lexical_base.hpp"
+#include "../Include/token.hpp"
+#include "lexical_DFA.h"
 
 class DFA;
 class lexAna {

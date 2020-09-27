@@ -7,7 +7,7 @@
  */
 #ifndef _PASER_BASE_HPP_
 #define _PASER_BASE_HPP_
-#include "../lexical.hpp"
+#include "../Include/lexical_analizer.hpp"
 
 typedef uint8_t _operClass;
 

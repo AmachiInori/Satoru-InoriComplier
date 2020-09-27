@@ -1,4 +1,4 @@
-#include "lexical.hpp"
+#include "../Include/lexical_analizer.hpp"
 
 int main(){
     lexicalAnalysis proc("C:\\Users\\Zhao Yufeng\\Documents\\VSCode\\C++\\Satoru InoriComplier\\Satoru InoriComplier\\lexciTest.sau");

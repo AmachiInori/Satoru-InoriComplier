@@ -7,7 +7,7 @@
  */
 #ifndef SAT_LL_H_
 #define SAT_LL_H_
-#include "parserBase.hpp"
+#include "../Include/lexical_analizer.hpp"
 
 class LL {
 private:

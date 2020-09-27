@@ -27,17 +27,17 @@
 
 ## 文档目录
 
-- [Satoru手册](document/Satoru_Base.md)
+- [Satoru手册](Satoru_InoriComplier/document/Satoru_Base.md)
 
 ### 文件结构
 
-- [文件结构](document/File_Structure.md)
+- [文件结构](Satoru_InoriComplier/document/File_Structure.md)
 
 ### 词法分析器
 
-- [词法规约说明](document/Lexical_Rules.md)
-- [词法分析器的源代码文档](document/Lexical_Analysis.md)
-- [确定有限状态自动机的说明文档](document/DFA.md)
+- [词法规约说明](Satoru_InoriComplier/document/Lexical_Rules.md)
+- [词法分析器的源代码文档](Satoru_InoriComplier/document/Lexical_Analysis.md)
+- [确定有限状态自动机的说明文档](Satoru_InoriComplier/document/DFA.md)
 
 ## 关于作者
 

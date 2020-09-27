@@ -6,7 +6,7 @@
  * @LastEditors: AmachiInori
  */
 //comment by GB2312
-#include "lexciBase.hpp"
+#include "lexical_base.hpp"
 #ifndef _TOKEN_HPP_
 #define _TOKEN_HPP_
 
