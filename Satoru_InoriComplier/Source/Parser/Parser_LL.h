@@ -22,8 +22,11 @@ private:
     }
     bool match(); //从缓冲区再拉一个token到nowtoken
 
+    parserNode* expressionC0();
     parserNode* expressionC1();
     parserNode* factor();
+    parserNode* idTail();
+    parserNode* parameter();
 
     LL(const LL& banned);
     LL& operator=(const LL& banned);
