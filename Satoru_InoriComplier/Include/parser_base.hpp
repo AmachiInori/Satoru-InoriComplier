@@ -11,6 +11,16 @@
 
 typedef uint8_t _operClass;
 
+class parserNode {
+private:
+    std::string _parserIdfi;
+    token* _referTo;
+public:
+    std::vector<parserNode*> child;
+    parserNode(token* _token, std::string _idfi) : _referTo(_token), _parserIdfi(_idfi) {}
+    bool addChild(parserNode* _child) { child.push_back(_child); }
+};
+
 bool isRemainTokenRType(remainToken* _tk) {
     const static std::unordered_set<_keyWordType> _kwd = { 
         kwd::KWINT, kwd::KWFLT, kwd::KWCHAR, kwd::KWLONG, kwd::KWSHT, kwd::KWDBL, kwd::VOID 

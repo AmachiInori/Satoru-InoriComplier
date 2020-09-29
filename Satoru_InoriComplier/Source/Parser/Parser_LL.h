@@ -7,17 +7,23 @@
  */
 #ifndef SAT_LL_H_
 #define SAT_LL_H_
-#include "../../Include/lexical_analizer.hpp"
+#include "../../Include/parser_base.hpp"
 
 class LL {
 private:
     lexicalAnalysis* _lex;
     bool isFinished = false;
     token* nowToken;
-    void match(); //从缓冲区再拉一个token到nowtoken
+    std::vector<parserNode*> newedPN;
 
-    void expressionC1();
-    void factor();
+    parserNode* creatNewNode(token* _token, std::string _idfi) {
+        newedPN.push_back(new parserNode(_token, _idfi));
+        return newedPN.back();
+    }
+    bool match(); //从缓冲区再拉一个token到nowtoken
+
+    parserNode* expressionC1();
+    parserNode* factor();
 
     LL(const LL& banned);
     LL& operator=(const LL& banned);
@@ -25,7 +31,7 @@ public:
     LL(std::string _filename) {
         _lex = new lexicalAnalysis(_filename);
     }
-    void runParserAnalysis();
+    parserNode* runParserAnalysis();
 };
 
 #endif // !SAT_LL_H_
