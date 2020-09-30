@@ -37,6 +37,7 @@ bool isRemainTokenTypeQual(remainToken* _tk) {
 
 _operClass getOperClass(operaToken* _optok) { //ÇëÌØÅĞµôÇ°×º¸ººÅ
     const static std::unordered_map<_operType, _operClass> _opclDic = {
+        {44/*,*/, 0},
         {61/*'='*/, 1}, {10069/*'+='*/, 1}, {11581/*'-='*/, 1}, {10813/*'*='*/, 1},
         {12093/*'/='*/, 1}, {9533/*'%='*/, 1}, 
         {15677/*'=='*/, 2}, {15933/*'>='*/, 2}, {15421/*'<='*/, 2}, {62/*'>'*/, 2}, {60/*'<'*/, 2}, 
