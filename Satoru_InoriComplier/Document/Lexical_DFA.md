@@ -8,7 +8,7 @@
 
 ### 非终结符号定义
 
-in `/Lexci/base.hpp`  
+in `/Include/lexical_base.hpp`  
 
 `doubleCompChar`->`inline bool isOpreatorCharOnlyDblWEqual(char _c)`  
 `[samechar]`->与之前输入的符号相同的符号**或`=`**  
