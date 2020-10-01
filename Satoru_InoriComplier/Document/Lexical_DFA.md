@@ -4,7 +4,7 @@
 
 ### 状态转移图
 
-![状态转移图](/document/Asset/DFAGraph.png)  
+![状态转移图](Asset/DFAGraph.png)  
 
 ### 非终结符号定义
 
