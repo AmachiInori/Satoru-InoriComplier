@@ -38,6 +38,11 @@
 - [词法规约说明](Satoru_InoriComplier/document/Lexical_Rules.md)
 - [词法分析器的源代码文档](Satoru_InoriComplier/document/Lexical_Analysis.md)
 - [确定有限状态自动机的说明文档](Satoru_InoriComplier/document/DFA.md)
+- [运算符定义](Satoru_InoriComplier/document/Lexical_Symbol.md)
+
+### 语法分析器
+
+- [LL(1)文法产生式](Satoru_InoriComplier/document/Parser_Rules.md)
 
 ## 关于作者
 
