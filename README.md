@@ -37,7 +37,7 @@
 
 - [词法规约说明](Satoru_InoriComplier/Document/Lexical_Rules.md)
 - [词法分析器的源代码文档](Satoru_InoriComplier/Document/Lexical_Analysis.md)
-- [确定有限状态自动机的说明文档](Satoru_InoriComplier/Document/DFA.md)
+- [确定有限状态自动机的说明文档](Satoru_InoriComplier/Document/Lexical_DFA.md)
 - [运算符定义](Satoru_InoriComplier/Document/Lexical_Symbol.md)
 
 ### 语法分析器
