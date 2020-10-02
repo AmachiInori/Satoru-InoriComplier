@@ -1,5 +1,12 @@
 #include "Parser_LL.h"
 
+LL::LL(lexicalAnalysis* _lexAna) : _lex(_lexAna) {}
+
+parserNode* LL::creatNewNode(token* _token, std::string _idfi) {
+        newedPN.push_back(new parserNode(_token, _idfi));
+        return newedPN.back();
+}
+
 parserNode* LL::factor() {
     if (nowToken->getTokenType() == OPER) {
         parserNode* nowPN = this->creatNewNode(nullptr, "factor");

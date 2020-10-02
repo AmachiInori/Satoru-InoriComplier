@@ -16,10 +16,7 @@ private:
     token* nowToken;
     std::vector<parserNode*> newedPN;
 
-    parserNode* creatNewNode(token* _token, std::string _idfi) {
-        newedPN.push_back(new parserNode(_token, _idfi));
-        return newedPN.back();
-    }
+    parserNode* creatNewNode(token* _token, std::string _idfi);
     bool match(); //从缓冲区再拉一个token到nowtoken
 
     parserNode* expressionC0();
@@ -31,9 +28,7 @@ private:
     LL(const LL& banned);
     LL& operator=(const LL& banned);
 public:
-    LL(std::string _filename) {
-        _lex = new lexicalAnalysis(_filename);
-    }
+    explicit LL(lexicalAnalysis* _lexAna);
     parserNode* runParserAnalysis();
 };
 
