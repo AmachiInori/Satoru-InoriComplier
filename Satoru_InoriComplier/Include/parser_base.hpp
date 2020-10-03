@@ -23,14 +23,14 @@ public:
 
 bool isRemainTokenRType(remainToken* _tk) {
     const static std::unordered_set<_keyWordType> _kwd = { 
-        kwd::KWINT, kwd::KWFLT, kwd::KWCHAR, kwd::KWLONG, kwd::KWSHT, kwd::KWDBL, kwd::VOID 
+        kwd::KWINT, kwd::KWFLT, kwd::KWCHAR, kwd::KWLONG, kwd::KWDBL, kwd::VOID 
     };
     return _kwd.find(_tk->getKwdType()) == _kwd.end();
 }
 
 bool isRemainTokenTypeQual(remainToken* _tk) {
     const static std::unordered_set<_keyWordType> _kwd = { 
-        kwd::UNSIGNED, kwd::SIGNED, kwd::CONST 
+        kwd::UNSIGNED, kwd::SIGNED, kwd::CONST, kwd::STATIC, kwd::KWSHT 
     };
     return _kwd.find(_tk->getKwdType()) == _kwd.end();
 }

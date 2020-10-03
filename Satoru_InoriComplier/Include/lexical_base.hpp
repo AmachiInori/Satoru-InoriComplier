@@ -29,7 +29,7 @@ namespace kwd {
     static const _keyWordType TRUE = 1, FALSE = 2, IF = 3, ELSE = 4, ELIF = 5, GOTO = 6, SWITCH = 7, WHILE = 8, UNTIL = 9,
     FOR = 10, DO = 11, CONTINUE = 12, BREAK = 13, RETURN = 14, KWINT = 15, KWFLT = 16, KWCHAR = 17, KWLONG = 18, KWSHT = 19,
     KWDBL = 20, UNSIGNED = 21, SIGNED = 22, VOID = 23, CONST = 24, IN = 25, FUNCTION = 26, RETURNS = 27, LIST = 28, PRIVATE = 29,
-    PUBLIC = 30, CLASS = 31, ORDER = 32;
+    PUBLIC = 30, CLASS = 31, ORDER = 32, STATIC = 33;
 }
 const static std::unordered_map<std::string, _keyWordType> _remain = {
     {"true", kwd::TRUE}, {"false", kwd::FALSE}, 
@@ -37,7 +37,7 @@ const static std::unordered_map<std::string, _keyWordType> _remain = {
     {"while", kwd::WHILE}, {"until", kwd::UNTIL}, {"for", kwd::FOR}, {"do", kwd::DO}, {"continue", kwd::CONTINUE}, {"break", kwd::BREAK}, 
     {"return", kwd::RETURN}, {"in", kwd::IN},
     {"int", kwd::KWINT}, {"float", kwd::KWFLT}, {"char", kwd::KWCHAR}, {"long", kwd::KWLONG}, {"short", kwd::KWSHT}, {"double", kwd::KWDBL}, 
-    {"unsigned", kwd::UNSIGNED}, {"signed", kwd::SIGNED}, {"void", kwd::VOID}, {"const", kwd::CONST},
+    {"unsigned", kwd::UNSIGNED}, {"signed", kwd::SIGNED}, {"void", kwd::VOID}, {"const", kwd::CONST}, {"static", kwd::STATIC},
     {"function", kwd::FUNCTION}, {"returns", kwd::RETURNS}, {"order", kwd::ORDER},
     {"list", kwd::LIST}, {"class", kwd::CLASS},
     {"private", kwd::PRIVATE}, {"public", kwd::PUBLIC}

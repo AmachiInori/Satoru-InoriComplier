@@ -44,7 +44,13 @@
 
 - [LL(1)文法产生式](Satoru_InoriComplier/Document/Parser_Rules.md)
 
-## 关于作者
+## 关于
 
-Satoru之父(误)  
-努力脱离材料天坑的[@AmachiInori](http://amachi.com.cn)  
+### 作者
+
+Satoru之父(误)，努力脱离材料天坑的[@AmachiInori](http://amachi.com.cn)  
+
+### 参考及鸣谢
+
+- Alfred V.Aho, etc. 编译原理(第二版)
+- Andrew W.Appel, etc. 现代编译原理-C语言描述(修订版)

@@ -23,14 +23,16 @@ $$Satoru\rarr SentenceList$$
 
 #### 声明语句
 
-1. 声明语句: $Declear\rarr \bold{type}\ \bold{id}\ 
-|\ \bold{type}\ \bold{id}\ Define\ |\ FuncDeclear$
+1. 声明语句: $Declear\rarr ElementType\ \bold{id}\ 
+|\ ElementType\ \bold{id}\ Define\ |\ FuncDeclear$
 2. 变量定义: $Define\rarr EquaDeclear\ |\ BrackDeclear$
 3. 等号式定义: $EquaDeclear\rarr\ =\ Expr_0$
 4. 功能化定义: $BrackDeclear\rarr (Parameters)$
-5. 函数声明及定义: $FuncDeclear\rarr \bold{function}\ \ (ParameterList)\ \bold{id}:\bold{type}\ SentenceBlock$
+5. 函数声明及定义: $FuncDeclear\rarr \bold{function}\ \ (ParameterList)\ \bold{id}:ElementType\ SentenceBlock$
 6. 函数形参列: $ParameterList\rarr ParameterList, FCParameter\ |\ FCParameter$
-7. 函数形参: $FCParameter\rarr \bold{type}\ \bold{id}$
+7. 函数形参: $FCParameter\rarr ElementType\ \bold{id}$
+8. 类型名: $ElementType\rarr TypePrefix\ \bold{type}$
+9. 类型修饰符: $TypePrefix\rarr TypePrefix\ \bold{tppre}\ |\ \boldsymbol{\epsilon}$
 
 ### 表达式
 
@@ -43,6 +45,5 @@ $Const\rarr \bold{str}\ |\ \bold{num}$
 $Identifier\rarr \bold{id}\ IdSuffix$  
 $IdSuffix\rarr (Parameters)\ |\ [Expr_0]\ |\ \boldsymbol{\epsilon}$  
 $Parameters\rarr Parameters\ ,Expr_0\ |\ Expr_0$  
-
 
 ## 预处理产生式
