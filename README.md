@@ -17,8 +17,9 @@
 
 ## 关于命名
 
-日文覚る的罗马音，意义是领会、领悟，与本语言的设计思想：一个启发性较强的简洁明快的语言相似。  
+日文覚る的罗马音，意义是领会、领悟。  
 来源于我的纸片人lp 东方Project的角色古明地さとり(Komeiji Satori)  
+和本语言没多大关系，Python里也没有蛇，不是吗？  
 小五世界第一！  
 
 ## 开发进度
@@ -28,9 +29,6 @@
 ## 文档目录
 
 - [Satoru手册](Satoru_InoriComplier/Document/Satoru_Base.md)
-
-### 文件结构
-
 - [文件结构](Satoru_InoriComplier/Document/File_Structure.md)
 
 ### 词法分析器
